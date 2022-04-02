@@ -1,10 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.Models;
+using AutoWrapper;
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+    builder =>
+    {
+        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
+
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PostContext>(opt =>
     opt.UseInMemoryDatabase("Posts"));
@@ -15,12 +28,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// https://github.com/proudmonkey/AutoWrapper
+app.UseApiResponseAndExceptionWrapper();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
