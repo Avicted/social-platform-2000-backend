@@ -10,7 +10,7 @@ public class PostContext : DbContext
     {
     }
 
-    public DbSet<Post> TodoItems { get; set; } = null!;
+    public DbSet<Post> Posts { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

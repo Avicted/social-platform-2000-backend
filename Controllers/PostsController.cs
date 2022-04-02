@@ -23,16 +23,18 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.TodoItems.ToListAsync();
+            var posts = await _context.Posts.ToListAsync();
+
+            return posts.OrderByDescending(post => post.CreatedDate).ToList();
         }
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(long id)
         {
-            var post = await _context.TodoItems.FindAsync(id);
+            var post = await _context.Posts.FindAsync(id);
 
             if (post == null)
             {
@@ -78,7 +80,7 @@ namespace social_platform_2000_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
-            _context.TodoItems.Add(post);
+            _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
@@ -88,13 +90,13 @@ namespace social_platform_2000_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(long id)
         {
-            var post = await _context.TodoItems.FindAsync(id);
+            var post = await _context.Posts.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
             }
 
-            _context.TodoItems.Remove(post);
+            _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +104,7 @@ namespace social_platform_2000_backend.Controllers
 
         private bool PostExists(long id)
         {
-            return _context.TodoItems.Any(e => e.Id == id);
+            return _context.Posts.Any(e => e.Id == id);
         }
     }
 }
