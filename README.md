@@ -1,9 +1,12 @@
 # Forum backend
 
+VSCode development docker container has been setup.
+
 Build & run:
 ```bash
 dotnet build
-dotnet run
+
+dotnet run --project social-platform-2000-backend/social-platform-2000-backend.csproj
 ```
 Create a new database migration:
 ```bash
@@ -14,6 +17,10 @@ Update the database with the migration(s):
 ```bash
 dotnet-ef database update
 ```
+
+# Architecture
+
+![Architecture](architecture.png "Architecture")
 
 # Database Diagram
 
