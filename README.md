@@ -18,11 +18,11 @@ dotnet-ef database update
 
 # Architecture
 
-![Architecture](architecture.png "Architecture")
+![Architecture](documentation/architecture.png "Architecture")
 
 # Database Diagram
 
-![Database Diagram](db_diagram.png "Database Diagram")
+![Database Diagram](documentation/db_diagram.png "Database Diagram")
 
 
 
