@@ -17,14 +17,13 @@ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 1. Be nice to eachother.
 '
 
-build_command="dotnet publish -c release --self-contained --runtime linux-x64"
-bin_path="bin/release/net6.0/linux-x64/social-platform-2000-backend"
+build_command="dotnet publish -c release --runtime linux-x64"
+bin_path="./bin/release/net6.0/linux-x64/social-platform-2000-backend"
 
 install_arch(){
     echo "Installing.."
     pacman --noconfirm -S dotnet-runtime dotnet-sdk
     echo "Done!"
-
 }
 
 install_debian(){
