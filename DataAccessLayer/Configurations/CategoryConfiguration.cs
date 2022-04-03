@@ -12,6 +12,11 @@ public class CategoryEntityTypeConfiguration : IEntityTypeConfiguration<Category
            .HasMany(c => c.Posts)
            .WithOne();
 
+        // @DAWDAWDAWDAWDAWD
+        builder
+            .Navigation(c => c.Posts)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
+
         builder
             .Property(c => c.Title)
             .IsRequired()

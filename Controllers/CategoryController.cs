@@ -21,7 +21,7 @@ namespace social_platform_2000_backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.Include(c => c.Posts).ToListAsync();
         }
 
         // GET: api/Category/5

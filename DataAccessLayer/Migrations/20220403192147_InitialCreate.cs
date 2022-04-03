@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace social_platform_2000_backend.Migrations
+namespace social_platform_2000_backend.DataAccessLayer.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -14,7 +14,7 @@ namespace social_platform_2000_backend.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    CategoryId = table.Column<long>(type: "bigint", nullable: false)
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -29,11 +29,11 @@ namespace social_platform_2000_backend.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    PostId = table.Column<long>(type: "bigint", nullable: false)
+                    PostId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
-                    CategoryId = table.Column<long>(type: "bigint", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

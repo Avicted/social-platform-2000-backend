@@ -9,10 +9,6 @@ public class PostEntityTypeConfiguration : IEntityTypeConfiguration<Post>
     public void Configure(EntityTypeBuilder<Post> builder)
     {
         builder
-            .HasOne(p => p.Category)
-            .WithMany(c => c.Posts);
-
-        builder
             .Property(p => p.Title)
             .IsRequired()
             .HasMaxLength(64);
