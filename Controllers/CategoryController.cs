@@ -26,7 +26,7 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(long id)
+        public async Task<ActionResult<Category>> GetCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);
 
@@ -41,7 +41,7 @@ namespace social_platform_2000_backend.Controllers
         // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(long id, Category category)
+        public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.CategoryId)
             {
@@ -82,7 +82,7 @@ namespace social_platform_2000_backend.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(long id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
@@ -96,7 +96,7 @@ namespace social_platform_2000_backend.Controllers
             return NoContent();
         }
 
-        private bool CategoryExists(long id)
+        private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.CategoryId == id);
         }

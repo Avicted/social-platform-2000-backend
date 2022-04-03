@@ -27,7 +27,7 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(long id)
+        public async Task<ActionResult<Post>> GetPost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
 
@@ -42,7 +42,7 @@ namespace social_platform_2000_backend.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(long id, Post post)
+        public async Task<IActionResult> PutPost(int id, Post post)
         {
             if (id != post.PostId)
             {
@@ -83,7 +83,7 @@ namespace social_platform_2000_backend.Controllers
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(long id)
+        public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);
             if (post == null)
@@ -97,7 +97,7 @@ namespace social_platform_2000_backend.Controllers
             return NoContent();
         }
 
-        private bool PostExists(long id)
+        private bool PostExists(int id)
         {
             return _context.Posts.Any(e => e.PostId == id);
         }
