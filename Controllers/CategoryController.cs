@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
+using social_platform_2000_backend.Services;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -10,25 +11,25 @@ namespace social_platform_2000_backend.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Category
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.Include(c => c.Posts).ToListAsync();
+            return await _categoryService.GetCategories();
         }
 
         // GET: api/Category/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categoryService.GetCategoryByID(id);
 
             if (category == null)
             {
@@ -48,25 +49,14 @@ namespace social_platform_2000_backend.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
+            var updatedCategory = await _categoryService.UpdateCategory(id, category);
 
-            try
+            if (updatedCategory == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            return Ok(updatedCategory);
         }
 
         // POST: api/Category
@@ -74,9 +64,7 @@ namespace social_platform_2000_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
+            var createdCategory = _categoryService.CreateCategory(category);
             return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
         }
 
@@ -84,21 +72,14 @@ namespace social_platform_2000_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            bool isDeleted = await _categoryService.DeleteCategory(id);
+
+            if (!isDeleted)
             {
                 return NotFound();
             }
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }
