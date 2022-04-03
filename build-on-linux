@@ -1,0 +1,54 @@
+#!/bin/bash
+
+: '
+(modified) DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+        Version 2, December 2004
+ 
+Copyright (C) 2022 Rocc D Cazbah <roccdcazbah@gmail.com>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
+ 
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ 
+0. You just DO WHAT THE FUCK YOU WANT TO.
+1. Be nice to eachother.
+'
+
+build_command="dotnet publish -c release --self-contained --runtime linux-x64"
+bin_path="bin/release/net6.0/linux-x64/social-platform-2000-backend"
+
+install_arch(){
+    echo "Installing.."
+    pacman --noconfirm -S dotnet-runtime dotnet-sdk
+    echo "Done!"
+
+}
+
+install_debian(){
+    echo "Installing for debian"
+    wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb \
+        -O packages-microsoft-prod.deb \
+        sudo dpkg -i packages-microsoft-prod.deb \
+        rm packages-microsoft-prod.deb
+
+    sudo apt-get update; \
+        sudo apt-get install -y apt-transport-https && \
+        sudo apt-get update && \
+        sudo apt-get install -y dotnet-sdk-6.0 && \
+        sudo apt-get install -y dotnet-runtime-6.0
+    echo "Done!"
+}
+
+install_dotnet_tools(){
+    [ -x "$(command -v pacman --version)" ] && install_arch
+    [ -x "$(command -v apt --verseion)" ] && install_debian
+}
+
+[ -z $1 ] && echo -e "usage:\n\tinit (needs root) - installs the deps\n\tbuild - builds the thing"
+[[ $1 == "init" ]] && install_dotnet_tools
+[[ $1 == "build" ]] && $build_command
+[[ $1 == "run" ]] && ./${bin_path}
+
