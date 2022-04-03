@@ -1,11 +1,6 @@
-#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
 
 namespace social_platform_2000_backend.Controllers
@@ -14,9 +9,9 @@ namespace social_platform_2000_backend.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly PostContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PostsController(PostContext context)
+        public PostsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -49,7 +44,7 @@ namespace social_platform_2000_backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(long id, Post post)
         {
-            if (id != post.Id)
+            if (id != post.PostId)
             {
                 return BadRequest();
             }
@@ -83,7 +78,7 @@ namespace social_platform_2000_backend.Controllers
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPost", new { id = post.Id }, post);
+            return CreatedAtAction("GetPost", new { id = post.PostId }, post);
         }
 
         // DELETE: api/Posts/5
@@ -104,7 +99,7 @@ namespace social_platform_2000_backend.Controllers
 
         private bool PostExists(long id)
         {
-            return _context.Posts.Any(e => e.Id == id);
+            return _context.Posts.Any(e => e.PostId == id);
         }
     }
 }

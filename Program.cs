@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using social_platform_2000_backend.Models;
 using AutoWrapper;
+using social_platform_2000_backend.DataAccessLayer;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -19,8 +18,8 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddDbContext<PostContext>(opt =>
-    opt.UseInMemoryDatabase("Posts"));
+builder.Services.AddDbContext<ApplicationDbContext>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -36,11 +35,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(MyAllowSpecificOrigins);
 }
-
-app.UseCors(MyAllowSpecificOrigins);
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
