@@ -43,7 +43,7 @@ install_debian(){
 
 install_dotnet_tools(){
     [ -x "$(command -v pacman --version)" ] && install_arch
-    [ -x "$(command -v apt --verseion)" ] && install_debian
+    [ -x "$(command -v apt --version)" ] && install_debian
 }
 
 [ -z $1 ] && echo -e "usage:\n\tinit (needs root) - installs the deps\n\tbuild - builds the thing"
