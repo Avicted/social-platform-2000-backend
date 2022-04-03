@@ -1,7 +1,4 @@
-#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.Services;
 

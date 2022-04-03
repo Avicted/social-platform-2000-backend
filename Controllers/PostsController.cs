@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
+using social_platform_2000_backend.Services;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -9,27 +8,25 @@ namespace social_platform_2000_backend.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPostService _postsService;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(IPostService postsService)
         {
-            _context = context;
+            _postsService = postsService;
         }
 
         // GET: api/Posts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            var posts = await _context.Posts.ToListAsync();
-
-            return posts.OrderByDescending(post => post.CreatedDate).ToList();
+            return await _postsService.GetPosts();
         }
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _postsService.GetPostByID(id);
 
             if (post == null)
             {
@@ -49,35 +46,22 @@ namespace social_platform_2000_backend.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(post).State = EntityState.Modified;
+            var updatedPost = await _postsService.UpdatePost(id, post);
 
-            try
+            if (updatedPost == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PostExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            return Ok(updatedPost);
         }
 
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(Post post)
+        public async Task<ActionResult<Post>> CreatePost(Post post)
         {
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
-
+            var createdPost = _postsService.CreatePost(post);
             return CreatedAtAction("GetPost", new { id = post.PostId }, post);
         }
 
@@ -85,21 +69,14 @@ namespace social_platform_2000_backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
+            bool isDeleted = await _postsService.DeletePost(id);
+
+            if (!isDeleted)
             {
                 return NotFound();
             }
 
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool PostExists(int id)
-        {
-            return _context.Posts.Any(e => e.PostId == id);
         }
     }
 }
