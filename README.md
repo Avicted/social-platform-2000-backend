@@ -14,3 +14,7 @@ Update the database with the migration(s):
 ```bash
 dotnet-ef database update
 ```
+
+# Database Diagram
+
+![Database Diagram](db_diagram.png "Database Diagram")
