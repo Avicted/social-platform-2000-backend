@@ -25,6 +25,7 @@ public class CategoryService : ICategoryService
     {
         return await _context.Categories.Include(c => c.Posts).ToListAsync();
     }
+
     public async Task<Category?> GetCategoryByID(int id)
     {
         return await _context.Categories.FindAsync(id);
