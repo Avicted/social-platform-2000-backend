@@ -59,10 +59,17 @@ namespace social_platform_2000_backend.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> CreatePost(Post post)
+        public async Task<ActionResult<Post>> CreatePost(CreatePostVM post)
         {
-            var createdPost = _postsService.CreatePost(post);
-            return CreatedAtAction("GetPost", new { id = post.PostId }, post);
+            var createdPost = await _postsService.CreatePost(post);
+
+            if (createdPost == null)
+            {
+                return NotFound();
+            }
+
+            return createdPost;
+
         }
 
         // DELETE: api/Posts/5

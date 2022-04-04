@@ -1,24 +1,38 @@
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace social_platform_2000_backend.Services;
 
 public class PostService : IPostService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public PostService(ApplicationDbContext context)
+    public PostService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
 
-    public async Task<Post> CreatePost(Post post)
+    public async Task<Post?> CreatePost(CreatePostVM post)
     {
-        _context.Posts.Add(post);
+        // Does the category exist?
+        var category = await _context.Categories.FindAsync(post.CategoryId);
+
+        if (category == null)
+        {
+            return null;
+        }
+
+        var entity = _mapper.Map<Post>(post);
+
+        _context.Posts.Add(entity);
         await _context.SaveChangesAsync();
-        return post;
+
+        return _mapper.Map<Post>(post);
     }
 
     public async Task<List<Post>> GetPosts()
