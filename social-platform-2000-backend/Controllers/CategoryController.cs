@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.Services;
+using social_platform_2000_backend.ViewModels;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -17,14 +18,14 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryVM>>> GetCategories()
         {
             return await _categoryService.GetCategories();
         }
 
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<CategoryVM>> GetCategory(int id)
         {
             var category = await _categoryService.GetCategoryByID(id);
 

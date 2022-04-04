@@ -1,37 +1,44 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
+using social_platform_2000_backend.ViewModels;
 
 namespace social_platform_2000_backend.Services;
 
 public class CategoryService : ICategoryService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public CategoryService(ApplicationDbContext context)
+    public CategoryService(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
 
-    public async Task<Category> CreateCategory(Category category)
+    public async Task<CategoryVM> CreateCategory(Category category)
     {
         _context.Categories.Add(category);
         await _context.SaveChangesAsync();
-        return category;
+        return _mapper.Map<CategoryVM>(category);
     }
 
-    public async Task<List<Category>> GetCategories()
+    public async Task<List<CategoryVM>> GetCategories()
     {
-        return await _context.Categories.Include(c => c.Posts).ToListAsync();
+        // return await _context.Categories.Include(c => c.Posts).ToListAsync();
+        var categoryList = await _context.Categories.ToListAsync();
+        var categoryVMList = _mapper.Map<List<CategoryVM>>(categoryList);
+        return categoryVMList;
     }
 
-    public async Task<Category?> GetCategoryByID(int id)
+    public async Task<CategoryVM?> GetCategoryByID(int id)
     {
-        return await _context.Categories.FindAsync(id);
+        return _mapper.Map<CategoryVM>(await _context.Categories.FindAsync(id));
     }
 
-    public async Task<Category?> UpdateCategory(int id, Category category)
+    public async Task<CategoryVM?> UpdateCategory(int id, Category category)
     {
         // Retrieve entity by id
         var entity = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
@@ -51,7 +58,7 @@ public class CategoryService : ICategoryService
 
         // @Note(Avic): EntityFramework core will have updated the entity at this point
         // So we can return "the same" entity with updated field(s)
-        return entity;
+        return _mapper.Map<CategoryVM>(entity);
     }
 
     public async Task<bool> DeleteCategory(int id)
