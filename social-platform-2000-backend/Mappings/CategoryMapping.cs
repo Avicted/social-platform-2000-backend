@@ -9,5 +9,7 @@ public class CategoryMapping : Profile
     public CategoryMapping()
     {
         CreateMap<Category, CategoryVM>();
+        CreateMap<CreateCategoryVM, Category>();
+        CreateMap<CreateCategoryVM, CategoryVM>();
     }
 }

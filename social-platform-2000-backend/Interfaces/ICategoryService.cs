@@ -5,7 +5,7 @@ namespace social_platform_2000_backend.Services;
 
 public interface ICategoryService
 {
-    Task<CategoryVM> CreateCategory(Category category);
+    Task<CategoryVM> CreateCategory(CreateCategoryVM category);
     Task<List<CategoryVM>> GetCategories();
     Task<CategoryVM?> GetCategoryByID(int id);
     Task<CategoryVM?> UpdateCategory(int id, Category category);

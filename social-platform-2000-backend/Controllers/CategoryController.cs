@@ -60,10 +60,11 @@ namespace social_platform_2000_backend.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<CategoryVM>> PostCategory(CreateCategoryVM category)
         {
-            var createdCategory = _categoryService.CreateCategory(category);
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+            var createdCategory = await _categoryService.CreateCategory(category);
+            return createdCategory;
+            // return CreatedAtAction("GetCategory", new { id = createdCategory.CategoryId }, category);
         }
 
         // DELETE: api/Category/5

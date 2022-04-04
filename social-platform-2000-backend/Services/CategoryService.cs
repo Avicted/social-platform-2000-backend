@@ -18,9 +18,11 @@ public class CategoryService : ICategoryService
     }
 
 
-    public async Task<CategoryVM> CreateCategory(Category category)
+    public async Task<CategoryVM> CreateCategory(CreateCategoryVM category)
     {
-        _context.Categories.Add(category);
+        var entity = _mapper.Map<Category>(category);
+
+        _context.Categories.Add(entity);
         await _context.SaveChangesAsync();
         return _mapper.Map<CategoryVM>(category);
     }
