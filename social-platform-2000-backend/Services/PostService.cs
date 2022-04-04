@@ -40,6 +40,11 @@ public class PostService : IPostService
         return await _context.Posts.ToListAsync();
     }
 
+    public async Task<List<Post>> GetPostsInCategory(int categoryId)
+    {
+        return await _context.Posts.Where(p => p.CategoryId == categoryId).ToListAsync();
+    }
+
     public async Task<Post?> GetPostByID(int id)
     {
         return await _context.Posts.FindAsync(id);

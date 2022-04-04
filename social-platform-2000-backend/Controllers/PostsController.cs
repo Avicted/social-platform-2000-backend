@@ -17,9 +17,10 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts(int categoryId)
         {
-            return await _postsService.GetPosts();
+            // return await _postsService.GetPosts();
+            return await _postsService.GetPostsInCategory(categoryId);
         }
 
         // GET: api/Posts/5
