@@ -1,8 +1,10 @@
 using AutoWrapper;
+using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -30,6 +32,32 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Seed the database with fake data
+// ---------------------------------------------------------------------
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
+        await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+        throw;
+    }
+}
+
+// await app.RunAsync();
+// ---------------------------------------------------------------------
 
 // https://github.com/proudmonkey/AutoWrapper
 app.UseApiResponseAndExceptionWrapper();
