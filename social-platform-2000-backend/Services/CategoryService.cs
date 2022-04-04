@@ -30,8 +30,20 @@ public class CategoryService : ICategoryService
     public async Task<List<CategoryVM>> GetCategories()
     {
         // return await _context.Categories.Include(c => c.Posts).ToListAsync();
-        var categoryList = await _context.Categories.ToListAsync();
+        var categoryList = await _context.Categories
+        .Include(c => c.Posts)
+        .OrderBy(c => c.CreatedDate)
+        .Select(c => new CategoryVM
+        {
+            CategoryId = c.CategoryId,
+            Title = c.Title,
+            PostsCount = c.Posts.Count,
+            CreatedDate = c.CreatedDate,
+            UpdatedDate = c.UpdatedDate
+        }).ToListAsync();
+
         var categoryVMList = _mapper.Map<List<CategoryVM>>(categoryList);
+
         return categoryVMList;
     }
 

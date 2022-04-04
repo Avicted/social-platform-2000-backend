@@ -66,7 +66,11 @@ using (var scope = app.Services.CreateScope())
 // @Note(Avic): Formats the REST API responses from the controllers so that
 // errors and 200 OK results can easily be distiguished in the React client
 // https://github.com/proudmonkey/AutoWrapper
-app.UseApiResponseAndExceptionWrapper();
+app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+{
+    ShowApiVersion = true,
+    ShowStatusCode = true
+});
 
 
 // Configure the HTTP request pipeline.
