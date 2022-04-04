@@ -2,6 +2,7 @@ using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using social_platform_2000_backend.ViewModels;
 
 namespace social_platform_2000_backend.Services;
 
@@ -40,9 +41,31 @@ public class PostService : IPostService
         return await _context.Posts.ToListAsync();
     }
 
-    public async Task<List<Post>> GetPostsInCategory(int categoryId)
+    public async Task<ApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
     {
-        return await _context.Posts.Where(p => p.CategoryId == categoryId).ToListAsync();
+        const int pageSize = 1;
+
+        var posts = _context.Posts.Where(p => p.CategoryId == categoryId);
+
+        if (posts == null)
+        {
+            return null;
+        }
+
+        var items = await posts.Skip(((pageNumber ?? 1) - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        // await PaginatedList<Post>.CreateAsync(posts, pageNumber ?? 1, pageSize);
+
+        return new ApiResponse(
+            items,
+            new Pagination
+            {
+                CurrentPage = pageNumber ?? 1,
+                PageSize = pageSize,
+                TotalItemsCount = posts.Count(),
+                TotalPages = (int)Math.Ceiling(posts.Count() / (double)pageSize)
+            }
+        );
     }
 
     public async Task<Post?> GetPostByID(int id)

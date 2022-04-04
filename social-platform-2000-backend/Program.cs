@@ -69,7 +69,8 @@ using (var scope = app.Services.CreateScope())
 app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
 {
     ShowApiVersion = true,
-    ShowStatusCode = true
+    ShowStatusCode = true,
+    UseCustomSchema = true
 });
 
 
