@@ -4,6 +4,7 @@ namespace social_platform_2000_backend.DataAccessLayer;
 
 public static class ApplicationDbContextSeed
 {
+    // @Note(Avic): This is where we seed the base of the data
     public static async Task SeedSampleDataAsync(ApplicationDbContext context)
     {
         // Seed, if necessary

@@ -18,6 +18,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>();
@@ -31,7 +32,9 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
+
 
 // Seed the database with fake data
 // ---------------------------------------------------------------------
@@ -55,12 +58,14 @@ using (var scope = app.Services.CreateScope())
         throw;
     }
 }
-
-// await app.RunAsync();
 // ---------------------------------------------------------------------
 
+
+// @Note(Avic): Formats the REST API responses from the controllers so that
+// errors and 200 OK results can easily be distiguished in the React client
 // https://github.com/proudmonkey/AutoWrapper
 app.UseApiResponseAndExceptionWrapper();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
