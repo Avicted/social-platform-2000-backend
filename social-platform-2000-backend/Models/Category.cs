@@ -4,6 +4,6 @@ public class Category : BaseEntity
 {
     // @Note(Avic): EFCore convention "ClassBameId"
     public int CategoryId { get; set; }
-    public string Title { get; set; }
-    public List<Post>? Posts { get; set; }
+    public string Title { get; set; } = null!;
+    public List<Post> Posts { get; set; } = null!;
 }
