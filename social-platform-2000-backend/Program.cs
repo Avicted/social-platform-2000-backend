@@ -25,9 +25,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>();
 
 // @Note(Avic): Scoped services live as long as one request
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.Services;
-using System.Linq;
+using social_platform_2000_backend.ViewModels;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -17,20 +17,21 @@ namespace social_platform_2000_backend.Controllers
         }
 
         // GET: api/Posts
-        [HttpGet]
-        public async Task<ActionResult<PaginatedList<Post>>> GetPosts(int categoryId, int? pageNumber)
+        [HttpGet("PostsInCategory/{categoryId}")]
+        public async Task<CustomApiResponse> GetPosts(int categoryId, int? pageNumber)
         {
             var posts = await _postsService.GetPostsInCategory(categoryId, pageNumber);
 
-            if (posts == null)
+            if (posts == null || posts.Pagination.TotalItemsCount <= 0)
             {
-                return NoContent();
+                return new CustomApiResponse(
+                    NoContent(),
+                    "No posts found",
+                    404
+                );
             }
 
-            return Ok(posts);
-
-            // return await _postsService.GetPosts();
-            // return await _postsService.GetPostsInCategory(categoryId);
+            return posts;
         }
 
         // GET: api/Posts/5

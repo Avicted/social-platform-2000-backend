@@ -10,11 +10,13 @@ public class PostService : IPostService
 {
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
-    public PostService(ApplicationDbContext context, IMapper mapper)
+    public PostService(ApplicationDbContext context, IMapper mapper, IConfiguration configuration)
     {
         _context = context;
         _mapper = mapper;
+        _configuration = configuration;
     }
 
 
@@ -41,22 +43,27 @@ public class PostService : IPostService
         return await _context.Posts.ToListAsync();
     }
 
-    public async Task<ApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
+    public async Task<CustomApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
     {
-        const int pageSize = 1;
-
-        var posts = _context.Posts.Where(p => p.CategoryId == categoryId);
+        var posts = _context.Posts
+            .Where(p => p.CategoryId == categoryId)
+            .OrderByDescending(p => p.CreatedDate)
+            .AsQueryable();
 
         if (posts == null)
         {
-            return null;
+            return new CustomApiResponse(
+                payload: new object(),
+                message: "No posts found",
+                statusCode: 204
+            );
         }
 
-        var items = await posts.Skip(((pageNumber ?? 1) - 1) * pageSize).Take(pageSize).ToListAsync();
+        // var items = await posts.Skip(((pageNumber ?? 1) - 1) * pageSize).Take(pageSize).ToListAsync();
+        const int pageSize = 10;
+        var items = await PaginatedList<Post>.CreateAsync(posts, pageNumber ?? 1, pageSize);
 
-        // await PaginatedList<Post>.CreateAsync(posts, pageNumber ?? 1, pageSize);
-
-        return new ApiResponse(
+        return new CustomApiResponse(
             items,
             new Pagination
             {

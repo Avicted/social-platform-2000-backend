@@ -18,9 +18,9 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryVM>>> GetCategories()
+        public async Task<CustomApiResponse> GetCategories(int? pageNumber)
         {
-            return await _categoryService.GetCategories();
+            return await _categoryService.GetCategories(pageNumber);
         }
 
         // GET: api/Category/5
@@ -64,7 +64,6 @@ namespace social_platform_2000_backend.Controllers
         {
             var createdCategory = await _categoryService.CreateCategory(category);
             return createdCategory;
-            // return CreatedAtAction("GetCategory", new { id = createdCategory.CategoryId }, category);
         }
 
         // DELETE: api/Category/5

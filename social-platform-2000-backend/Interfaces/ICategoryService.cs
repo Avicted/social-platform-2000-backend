@@ -6,7 +6,7 @@ namespace social_platform_2000_backend.Services;
 public interface ICategoryService
 {
     Task<CategoryVM> CreateCategory(CreateCategoryVM category);
-    Task<List<CategoryVM>> GetCategories();
+    Task<CustomApiResponse> GetCategories(int? pageNumber);
     Task<CategoryVM?> GetCategoryByID(int id);
     Task<CategoryVM?> UpdateCategory(int id, Category category);
     Task<bool> DeleteCategory(int id);

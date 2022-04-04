@@ -1,13 +1,13 @@
 namespace social_platform_2000_backend.ViewModels;
 
-public class ApiResponse
+public class CustomApiResponse
 {
     public int Code { get; set; }
     public string Message { get; set; }
     public object Payload { get; set; }
     public Pagination Pagination { get; set; }
 
-    public ApiResponse(
+    public CustomApiResponse(
         object payload = null,
         string message = "",
         int statusCode = 200,
@@ -19,7 +19,7 @@ public class ApiResponse
         this.Pagination = pagination;
     }
 
-    public ApiResponse(
+    public CustomApiResponse(
         object payload = null,
         Pagination pagination = null)
     {
@@ -29,7 +29,7 @@ public class ApiResponse
         this.Pagination = pagination;
     }
 
-    public ApiResponse(object payload)
+    public CustomApiResponse(object payload)
     {
         this.Code = 200;
         this.Payload = payload;

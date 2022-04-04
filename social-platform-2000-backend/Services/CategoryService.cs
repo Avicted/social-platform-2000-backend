@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.ViewModels;
+using System.Linq;
 
 namespace social_platform_2000_backend.Services;
 
@@ -27,11 +28,11 @@ public class CategoryService : ICategoryService
         return _mapper.Map<CategoryVM>(category);
     }
 
-    public async Task<List<CategoryVM>> GetCategories()
+    public async Task<CustomApiResponse> GetCategories(int? pageNumber)
     {
-        var categoryList = await _context.Categories
+        var categories = _context.Categories
             .Include(c => c.Posts)
-            .OrderBy(c => c.CreatedDate)
+            .OrderByDescending(c => c.CreatedDate)
             .Select(c => new CategoryVM
             {
                 CategoryId = c.CategoryId,
@@ -39,11 +40,33 @@ public class CategoryService : ICategoryService
                 PostsCount = c.Posts.Count,
                 CreatedDate = c.CreatedDate,
                 UpdatedDate = c.UpdatedDate
-            }).ToListAsync();
+            })
+            .AsQueryable();
 
-        var categoryVMList = _mapper.Map<List<CategoryVM>>(categoryList);
+        if (categories == null)
+        {
+            return new CustomApiResponse(
+                payload: new object(),
+                message: "No categories found",
+                statusCode: 204
+            );
+        }
 
-        return categoryVMList;
+        const int pageSize = 10;
+        var temp = await PaginatedList<CategoryVM>.CreateAsync(categories, pageNumber ?? 1, pageSize);
+        var result = _mapper.Map<List<CategoryVM>>(temp);
+
+
+        return new CustomApiResponse(
+            payload: result,
+            new Pagination
+            {
+                CurrentPage = pageNumber ?? 1,
+                PageSize = pageSize,
+                TotalItemsCount = result.Count(),
+                TotalPages = (int)Math.Ceiling(result.Count() / (double)pageSize),
+            }
+        );
     }
 
     public async Task<CategoryVM?> GetCategoryByID(int id)

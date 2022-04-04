@@ -5,20 +5,20 @@ namespace social_platform_2000_backend.Models;
 // https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/sort-filter-page?view=aspnetcore-6.0
 public class PaginatedList<T> : List<T>
 {
-    public int PageIndex { get; private set; }
+    public int CurrentPage { get; private set; }
     public int TotalPages { get; private set; }
 
-    public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+    public PaginatedList(List<T> items, int count, int currentPage, int pageSize)
     {
-        PageIndex = pageIndex;
+        CurrentPage = currentPage;
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
         this.AddRange(items);
     }
 
-    public bool HasPreviousPage => PageIndex > 1;
+    public bool HasPreviousPage => CurrentPage > 1;
 
-    public bool HasNextPage => PageIndex < TotalPages;
+    public bool HasNextPage => CurrentPage < TotalPages;
 
     public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
     {
