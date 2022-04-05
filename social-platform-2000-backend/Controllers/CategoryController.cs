@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.Services;
-using social_platform_2000_backend.ViewModels;
+using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -25,7 +25,7 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryVM>> GetCategory(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
             var category = await _categoryService.GetCategoryByID(id);
 
@@ -34,19 +34,14 @@ namespace social_platform_2000_backend.Controllers
                 return NotFound();
             }
 
-            return category;
+            return Ok(category);
         }
 
         // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutCategory(int id, UpdateCategoryDto category)
         {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
             var updatedCategory = await _categoryService.UpdateCategory(id, category);
 
             if (updatedCategory == null)
@@ -60,8 +55,13 @@ namespace social_platform_2000_backend.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CategoryVM>> PostCategory(CreateCategoryVM category)
+        public async Task<ActionResult<CategoryDto>> PostCategory(CreateCategoryDto category)
         {
+            if (category.Title == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var createdCategory = await _categoryService.CreateCategory(category);
             return createdCategory;
         }

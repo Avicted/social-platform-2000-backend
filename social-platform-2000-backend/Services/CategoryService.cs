@@ -1,36 +1,36 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Models;
-using social_platform_2000_backend.ViewModels;
-using System.Linq;
+using social_platform_2000_backend.DTO;
+using social_platform_2000_backend.Interfaces;
 
 namespace social_platform_2000_backend.Services;
 
 public class CategoryService : ICategoryService
 {
-    private readonly ApplicationDbContext _context;
+    private IRepositoryWrapper _repository;
     private readonly IMapper _mapper;
 
-    public CategoryService(ApplicationDbContext context, IMapper mapper)
+    public CategoryService(IRepositoryWrapper repository, IMapper mapper)
     {
-        _context = context;
+        _repository = repository;
         _mapper = mapper;
     }
 
 
-    public async Task<CategoryVM> CreateCategory(CreateCategoryVM category)
+    public async Task<CategoryDto> CreateCategory(CreateCategoryDto category)
     {
         var entity = _mapper.Map<Category>(category);
 
-        _context.Categories.Add(entity);
-        await _context.SaveChangesAsync();
-        return _mapper.Map<CategoryVM>(category);
+        _repository.Category.Create(entity);
+
+        await _repository.SaveAsync();
+
+        return _mapper.Map<CategoryDto>(entity);
     }
 
     public async Task<CustomApiResponse> GetCategories(int? pageNumber)
     {
-        var categories = _context.Categories
+        /* var categories = _context.Categories
             .Include(c => c.Posts)
             .OrderByDescending(c => c.CreatedDate)
             .Select(c => new CategoryVM
@@ -41,7 +41,9 @@ public class CategoryService : ICategoryService
                 CreatedDate = c.CreatedDate,
                 UpdatedDate = c.UpdatedDate
             })
-            .AsQueryable();
+            .AsQueryable(); */
+
+        var categories = await _repository.Category.GetAllGategoriesAsync();
 
         if (categories == null)
         {
@@ -53,8 +55,8 @@ public class CategoryService : ICategoryService
         }
 
         const int pageSize = 10;
-        var temp = await PaginatedList<CategoryVM>.CreateAsync(categories, pageNumber ?? 1, pageSize);
-        var result = _mapper.Map<List<CategoryVM>>(temp);
+        // var temp = await PaginatedList<Category>.CreateAsync((IQueryable<Category>)categories, pageNumber ?? 1, pageSize);
+        var result = _mapper.Map<List<CategoryDto>>(categories);
 
 
         return new CustomApiResponse(
@@ -69,66 +71,55 @@ public class CategoryService : ICategoryService
         );
     }
 
-    public async Task<CategoryVM?> GetCategoryByID(int id)
+    public async Task<CategoryDto?> GetCategoryByID(int id)
     {
-        var category = await _context.Categories
-            .Where(c => c.CategoryId == id)
-            .Include(c => c.Posts)
-            .OrderBy(c => c.CreatedDate)
-            .Select(c => new CategoryVM
-            {
-                CategoryId = c.CategoryId,
-                Title = c.Title,
-                PostsCount = c.Posts.Count,
-                CreatedDate = c.CreatedDate,
-                UpdatedDate = c.UpdatedDate
-            }).FirstOrDefaultAsync();
+        var category = await _repository.Category.GetCategoryByIdAsync(id);
 
         if (category == null)
         {
             return null;
         }
 
-        var categoryVM = _mapper.Map<CategoryVM>(category);
+        var categoryDto = _mapper.Map<CategoryDto>(category);
 
-        return categoryVM;
+        return categoryDto;
     }
 
-    public async Task<CategoryVM?> UpdateCategory(int id, Category category)
+    public async Task<CategoryDto?> UpdateCategory(int id, UpdateCategoryDto category)
     {
         // Retrieve entity by id
-        var entity = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+        var entity = await _repository.Category.GetCategoryByIdAsync(id);
 
         // Validate entity is not null
         if (entity != null)
         {
             entity.Title = category.Title;
 
+            _repository.Category.UpdateCategory(entity);
+
             // Save changes to the database
-            await _context.SaveChangesAsync();
-        }
-        else
-        {
-            return null;
+            await _repository.SaveAsync();
+
+            // @Note(Avic): EntityFramework core will have updated the entity at this point
+            // So we can return "the same" entity with updated field(s)
+            return _mapper.Map<CategoryDto>(entity);
         }
 
-        // @Note(Avic): EntityFramework core will have updated the entity at this point
-        // So we can return "the same" entity with updated field(s)
-        return _mapper.Map<CategoryVM>(entity);
+        return null;
     }
 
     public async Task<bool> DeleteCategory(int id)
     {
         // Retrieve entity by id
-        var entity = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+        var entity = await _repository.Category.GetCategoryByIdAsync(id);
 
         // Validate entity is not null
         if (entity != null)
         {
-            _context.Categories.Remove(entity);
+            _repository.Category.Delete(entity);
 
             // Save changes to the database
-            await _context.SaveChangesAsync();
+            await _repository.SaveAsync();
         }
         else
         {

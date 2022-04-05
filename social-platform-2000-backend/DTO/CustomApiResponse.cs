@@ -1,4 +1,4 @@
-namespace social_platform_2000_backend.ViewModels;
+namespace social_platform_2000_backend.DTO;
 
 public class CustomApiResponse
 {

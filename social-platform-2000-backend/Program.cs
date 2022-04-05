@@ -2,7 +2,7 @@ using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Services;
-using AutoMapper;
+using social_platform_2000_backend.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 
 // @Note(Avic): Scoped services live as long as one request
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IRepositoryWrapper, RespositoryWrapper>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 

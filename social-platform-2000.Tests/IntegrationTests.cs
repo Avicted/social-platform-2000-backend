@@ -10,8 +10,8 @@ using Respawn;
 
 namespace social_platform_2000.Tests;
 
-[SetUpFixture]
-public class Tests
+[TestFixture]
+public class IntegrationTests
 {
     private static IConfigurationRoot _configuration = null!;
     private static IServiceScopeFactory _scopeFactory = null!;

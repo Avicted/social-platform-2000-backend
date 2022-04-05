@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using social_platform_2000_backend.Models;
 using social_platform_2000_backend.Services;
-using social_platform_2000_backend.ViewModels;
+using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.Controllers
 {
@@ -18,7 +18,7 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Posts
         [HttpGet("PostsInCategory/{categoryId}")]
-        public async Task<CustomApiResponse> GetPosts(int categoryId, int? pageNumber)
+        public async Task<CustomApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
         {
             var posts = await _postsService.GetPostsInCategory(categoryId, pageNumber);
 
@@ -36,7 +36,7 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(int id)
+        public async Task<ActionResult<PostDto>> GetPost(int id)
         {
             var post = await _postsService.GetPostByID(id);
 
@@ -51,13 +51,8 @@ namespace social_platform_2000_backend.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, Post post)
+        public async Task<IActionResult> PutPost(int id, UpdatePostDto post)
         {
-            if (id != post.PostId)
-            {
-                return BadRequest();
-            }
-
             var updatedPost = await _postsService.UpdatePost(id, post);
 
             if (updatedPost == null)
@@ -71,7 +66,7 @@ namespace social_platform_2000_backend.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> CreatePost(CreatePostVM post)
+        public async Task<ActionResult<PostDto>> CreatePost(CreatePostDto post)
         {
             var createdPost = await _postsService.CreatePost(post);
 
