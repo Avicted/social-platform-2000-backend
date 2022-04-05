@@ -1,9 +1,10 @@
 using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
-using social_platform_2000_backend.DataAccessLayer;
-using social_platform_2000_backend.Services;
-using social_platform_2000_backend.Interfaces;
+using Infrastructure;
+using sp2000.Services;
+using sp2000.Interfaces;
 using Microsoft.OpenApi.Models;
+using sp2000.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +24,10 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // @Note(Avic): Scoped services live as long as one request
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IRepositoryWrapper, RespositoryWrapper>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IPostsService, PostService>();
 

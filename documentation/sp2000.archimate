@@ -38,7 +38,7 @@
   <folder name="Other" id="id-4d3adf3e7ddb4d03bd189a812bb39434" type="other">
     <element xsi:type="archimate:Grouping" name="Grouping" id="id-2715a46e92364922b36d3f412d2091e1"/>
     <element xsi:type="archimate:Junction" name="Junction" id="id-e23796103ea341c4907c52954f532bc7"/>
-    <element xsi:type="archimate:Grouping" name="DataAccessLayer" id="id-3c93714c14a8492c872ad1736b34a8a6"/>
+    <element xsi:type="archimate:Grouping" name="Infrastructure" id="id-3c93714c14a8492c872ad1736b34a8a6"/>
     <element xsi:type="archimate:Grouping" name="ServiceLayer" id="id-cfe2db3e0a9e44c1ab913edc338330d1"/>
     <element xsi:type="archimate:Grouping" name="REST API (Presentation Layer)" id="id-f5723cca2f4e481ab5b517817b83e9a7"/>
   </folder>

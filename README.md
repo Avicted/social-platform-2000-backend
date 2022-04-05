@@ -3,15 +3,19 @@
 VSCode development docker container has been setup.
 
 Run:
+
 ```bash
 ./develop.sh
 ```
+
 Create a new database migration:
+
 ```bash
-dotnet-ef migrations Add --project social-platform-2000-backend/social-platform-2000-backend.csproj -o DataAccessLayer/Migrations <name_of_migration>
+dotnet ef migrations add "<name_of_migration>" --project sp2000.Infrastructure --startup-project sp2000.API --output-dir sp2000.Infrastructure\Persistence\Migrations
 ```
 
 Update the database with the migration(s):
+
 ```bash
 dotnet-ef database update
 ```
@@ -24,7 +28,6 @@ dotnet-ef database update
 
 ![Database Diagram](documentation/db_diagram.png "Database Diagram")
 
-
-
 # Common problems
+
 Red squiggly lines everywhere, VSCode -> <CTRL + SHIFT + P> restart omnisharp, the language server.

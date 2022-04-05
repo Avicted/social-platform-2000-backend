@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using social_platform_2000_backend.Models;
-using social_platform_2000_backend.Services;
-using social_platform_2000_backend.DTO;
+using sp2000.Models;
+using sp2000.Services;
+using sp2000.DTO;
 
-namespace social_platform_2000_backend.Controllers
+namespace sp2000.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
