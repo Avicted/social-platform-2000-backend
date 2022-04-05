@@ -3,9 +3,9 @@ using social_platform_2000_backend.Models;
 
 namespace social_platform_2000_backend.DataAccessLayer;
 
-public class PostRepository : RepositoryBase<Post>, IPostRepository
+public class PostsRepository : RepositoryBase<Post>, IPostsRepository
 {
-    public PostRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
+    public PostsRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
     {
     }
 

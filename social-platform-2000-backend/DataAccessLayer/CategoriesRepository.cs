@@ -6,9 +6,9 @@ using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.DataAccessLayer;
 
-public class CategoryRepository : RepositoryBase<Category>, ICategoryRepository
+public class CategoriesRepository : RepositoryBase<Category>, ICategoriesRepository
 {
-    public CategoryRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
+    public CategoriesRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
     {
     }
 

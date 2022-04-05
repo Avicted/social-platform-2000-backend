@@ -9,29 +9,11 @@ namespace social_platform_2000_backend.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly IPostService _postsService;
+        private readonly IPostsService _postsService;
 
-        public PostsController(IPostService postsService)
+        public PostsController(IPostsService postsService)
         {
             _postsService = postsService;
-        }
-
-        // GET: api/Posts
-        [HttpGet("PostsInCategory/{categoryId}")]
-        public async Task<CustomApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
-        {
-            var posts = await _postsService.GetPostsInCategory(categoryId, pageNumber);
-
-            if (posts == null || posts.Pagination.TotalItemsCount <= 0)
-            {
-                return new CustomApiResponse(
-                    NoContent(),
-                    "No posts found",
-                    404
-                );
-            }
-
-            return posts;
         }
 
         // GET: api/Posts/5

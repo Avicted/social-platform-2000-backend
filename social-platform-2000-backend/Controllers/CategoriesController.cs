@@ -7,13 +7,15 @@ namespace social_platform_2000_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoriesService _categoryService;
+        private readonly IPostsService _postsService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoriesController(ICategoriesService categoryService, IPostsService postsService)
         {
             _categoryService = categoryService;
+            _postsService = postsService;
         }
 
         // GET: api/Category
@@ -37,6 +39,24 @@ namespace social_platform_2000_backend.Controllers
             }
 
             return Ok(category);
+        }
+
+        // GET: api/Category/posts
+        [HttpGet("{id}/posts")]
+        public async Task<CustomApiResponse> GetPostsInCategory(int id, int? pageNumber)
+        {
+            var posts = await _postsService.GetPostsInCategory(id, pageNumber);
+
+            if (posts == null || posts.Pagination.TotalItemsCount <= 0)
+            {
+                return new CustomApiResponse(
+                    NoContent(),
+                    "No posts found",
+                    404
+                );
+            }
+
+            return posts;
         }
 
         // PUT: api/Category/5

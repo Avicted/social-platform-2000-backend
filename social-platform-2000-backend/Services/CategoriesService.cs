@@ -5,12 +5,12 @@ using social_platform_2000_backend.Interfaces;
 
 namespace social_platform_2000_backend.Services;
 
-public class CategoryService : ICategoryService
+public class CategoriesService : ICategoriesService
 {
     private IRepositoryWrapper _repository;
     private readonly IMapper _mapper;
 
-    public CategoryService(IRepositoryWrapper repository, IMapper mapper)
+    public CategoriesService(IRepositoryWrapper repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

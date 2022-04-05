@@ -6,7 +6,7 @@ using social_platform_2000_backend.Interfaces;
 
 namespace social_platform_2000_backend.Services;
 
-public class PostService : IPostService
+public class PostService : IPostsService
 {
     private readonly IRepositoryWrapper _repository;
     private readonly IMapper _mapper;

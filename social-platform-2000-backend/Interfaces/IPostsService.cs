@@ -3,7 +3,7 @@ using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.Services;
 
-public interface IPostService
+public interface IPostsService
 {
     Task<PostDto> CreatePost(CreatePostDto post);
     Task<CustomApiResponse> GetPostsInCategory(int categoryId, int? pageNumber);

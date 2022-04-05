@@ -4,7 +4,7 @@ using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.DataAccessLayer;
 
-public interface ICategoryRepository : IRepositoryBase<Category>
+public interface ICategoriesRepository : IRepositoryBase<Category>
 {
     Task<IEnumerable<CategoryDto>> GetAllGategoriesAsync();
     Task<Category> GetCategoryByIdAsync(int id);

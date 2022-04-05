@@ -4,9 +4,9 @@ using social_platform_2000_backend.DTO;
 
 namespace social_platform_2000_backend.Mappings;
 
-public class ProfileMapping : Profile
+public class PostsMapping : Profile
 {
-    public ProfileMapping()
+    public PostsMapping()
     {
         CreateMap<Post, CreatePostDto>();
         CreateMap<Post, PostDto>();

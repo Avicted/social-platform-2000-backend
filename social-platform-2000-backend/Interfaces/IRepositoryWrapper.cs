@@ -7,7 +7,7 @@ namespace social_platform_2000_backend.Interfaces;
 // Usage: _wrapper.Category.method_from_IRepositoryBase
 public interface IRepositoryWrapper
 {
-    ICategoryRepository Category { get; }
-    IPostRepository Post { get; }
+    ICategoriesRepository Category { get; }
+    IPostsRepository Post { get; }
     Task SaveAsync();
 }
