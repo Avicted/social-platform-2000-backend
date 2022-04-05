@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using social_platform_2000_backend.DataAccessLayer;
 using social_platform_2000_backend.Services;
 using social_platform_2000_backend.Interfaces;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,15 @@ builder.Services.AddScoped<IPostsService, PostService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Social Platform API",
+        Description = "An ASP.NET Core Web API for discussing topics in a forum",
+    });
+});
 
 
 var app = builder.Build();
