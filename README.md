@@ -18,7 +18,7 @@ dotnet-ef database update
 
 # Architecture
 
-![Architecture](documentation/architecture.png "Architecture")
+![Architecture](documentation/architecture_2.png "Architecture")
 
 # Database Diagram
 
