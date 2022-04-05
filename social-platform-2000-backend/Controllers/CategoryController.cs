@@ -18,9 +18,11 @@ namespace social_platform_2000_backend.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<CustomApiResponse> GetCategories(int? pageNumber)
+        public async Task<IActionResult> GetCategories(int? pageNumber)
         {
-            return await _categoryService.GetCategories(pageNumber);
+            var categories = await _categoryService.GetCategories(pageNumber);
+
+            return Ok(categories);
         }
 
         // GET: api/Category/5

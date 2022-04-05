@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "social-platform-2000-backend", "social-platform-2000-backend\social-platform-2000-backend.csproj", "{0F0CECC2-19C7-4029-A9B4-5124A97F8329}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "social-platform-2000.Tests", "social-platform-2000.Tests\social-platform-2000.Tests.csproj", "{BDA18DE5-DCC3-4D3F-9DF9-11CFB14CCE04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "social-platform-2000.UnitTests", "social-platform-2000.UnitTests\social-platform-2000.UnitTests.csproj", "{7A275F0A-5AC8-4387-B761-D3574EAF66A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +20,9 @@ Global
 		{0F0CECC2-19C7-4029-A9B4-5124A97F8329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F0CECC2-19C7-4029-A9B4-5124A97F8329}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F0CECC2-19C7-4029-A9B4-5124A97F8329}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDA18DE5-DCC3-4D3F-9DF9-11CFB14CCE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDA18DE5-DCC3-4D3F-9DF9-11CFB14CCE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDA18DE5-DCC3-4D3F-9DF9-11CFB14CCE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDA18DE5-DCC3-4D3F-9DF9-11CFB14CCE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A275F0A-5AC8-4387-B761-D3574EAF66A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A275F0A-5AC8-4387-B761-D3574EAF66A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A275F0A-5AC8-4387-B761-D3574EAF66A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A275F0A-5AC8-4387-B761-D3574EAF66A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

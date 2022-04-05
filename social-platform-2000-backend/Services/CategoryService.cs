@@ -30,19 +30,6 @@ public class CategoryService : ICategoryService
 
     public async Task<CustomApiResponse> GetCategories(int? pageNumber)
     {
-        /* var categories = _context.Categories
-            .Include(c => c.Posts)
-            .OrderByDescending(c => c.CreatedDate)
-            .Select(c => new CategoryVM
-            {
-                CategoryId = c.CategoryId,
-                Title = c.Title,
-                PostsCount = c.Posts.Count,
-                CreatedDate = c.CreatedDate,
-                UpdatedDate = c.UpdatedDate
-            })
-            .AsQueryable(); */
-
         var categories = await _repository.Category.GetAllGategoriesAsync();
 
         if (categories == null)
