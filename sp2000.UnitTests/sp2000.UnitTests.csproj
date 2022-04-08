@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -24,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\sp2000.API\sp2000.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mocks\" />
   </ItemGroup>
 
 </Project>

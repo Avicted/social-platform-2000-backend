@@ -23,6 +23,11 @@ namespace sp2000.Controllers
         {
             var categories = await _categoryService.GetCategories(pageNumber);
 
+            if (categories.Count <= 0)
+            {
+                return NotFound();
+            }
+
             return Ok(categories);
         }
 

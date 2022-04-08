@@ -13,11 +13,9 @@ namespace sp2000.UnitTests
 {
     public class CategoriesControllerTests
     {
-        [Fact]
-        public async void GetCategories_Returns_A_List_Of_Categories()
+        private static List<PostDto> GetFakePosts()
         {
-            // Arrange
-            var fakePosts = new List<PostDto> { 
+            return new List<PostDto> {
                 new PostDto()
                 {
                     PostId = 1,
@@ -37,8 +35,11 @@ namespace sp2000.UnitTests
                     UpdatedDate = DateTime.Now
                 }
             };
+        }
 
-            var fakeCategories = new List<CategoryDto> {
+        private static List<CategoryDto> GetFakeCategories()
+        {
+            return new List<CategoryDto> {
                 new CategoryDto() {
                     CategoryId = 1,
                     CreatedDate = DateTime.Now,
@@ -61,28 +62,54 @@ namespace sp2000.UnitTests
                     Title = "Test title 3"
                 }
             };
-            
-            // A.CollectionOfDummy<CategoryDto>(count).AsEnumerable();
+        }
 
-            var categoriesService= A.Fake<ICategoriesService>();
+        [Fact]
+        public async void GetCategories_Returns_A_List_Of_Categories()
+        {
+            // Arrange
+            var fakePosts = GetFakePosts();
+            var fakeCategories = GetFakeCategories();
+
+            var categoriesService = A.Fake<ICategoriesService>();
             A.CallTo(() => categoriesService.GetCategories(null)).Returns(Task.FromResult(fakeCategories));
 
-            var postsService= A.Fake<IPostsService>();
+            var postsService = A.Fake<IPostsService>();
             var controller = new CategoriesController(categoriesService, postsService);
 
 
             // Act
             var actionResult = await controller.GetCategories(null);
 
-            
+
             // Assert
             var okResult = (OkObjectResult)actionResult;
-
             Assert.NotNull(okResult);
 
             var result = okResult.Value as List<CategoryDto>;
-
             Assert.Equal(fakeCategories.Count, result?.Count);
+        }
+
+        [Fact]
+        public async void GetCategories_Returns_An_Empty_List_Of_Categories()
+        {
+            // Arrange
+            var fakePosts = GetFakePosts();
+            var fakeCategories = new List<CategoryDto>();
+
+            var categoriesService = A.Fake<ICategoriesService>();
+            A.CallTo(() => categoriesService.GetCategories(null)).Returns(Task.FromResult(fakeCategories));
+
+            var postsService = A.Fake<IPostsService>();
+            var controller = new CategoriesController(categoriesService, postsService);
+
+
+            // Act
+            var actionResult = await controller.GetCategories(null);
+
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult);
         }
     }
 }
