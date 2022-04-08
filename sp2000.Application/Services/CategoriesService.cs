@@ -1,13 +1,13 @@
 using AutoMapper;
 using sp2000.Models;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 using sp2000.Interfaces;
 
 namespace sp2000.Services;
 
 public class CategoriesService : ICategoriesService
 {
-    private IRepositoryWrapper _repository;
+    private readonly IRepositoryWrapper _repository;
     private readonly IMapper _mapper;
 
     public CategoriesService(IRepositoryWrapper repository, IMapper mapper)
@@ -28,34 +28,20 @@ public class CategoriesService : ICategoriesService
         return _mapper.Map<CategoryDto>(entity);
     }
 
-    public async Task<CustomApiResponse> GetCategories(int? pageNumber)
+    public async Task<List<CategoryDto>> GetCategories(int? pageNumber)
     {
         var categories = await _repository.Category.GetAllGategoriesAsync();
 
         if (categories == null)
         {
-            return new CustomApiResponse(
-                payload: new object(),
-                message: "No categories found",
-                statusCode: 204
-            );
+            return new List<CategoryDto>();
         }
-
-        const int pageSize = 10;
+        // const int pageSize = 10;
         // var temp = await PaginatedList<Category>.CreateAsync((IQueryable<Category>)categories, pageNumber ?? 1, pageSize);
         var result = _mapper.Map<List<CategoryDto>>(categories);
 
 
-        return new CustomApiResponse(
-            payload: result,
-            new Pagination
-            {
-                CurrentPage = pageNumber ?? 1,
-                PageSize = pageSize,
-                TotalItemsCount = result.Count(),
-                TotalPages = (int)Math.Ceiling(result.Count() / (double)pageSize),
-            }
-        );
+        return result;
     }
 
     public async Task<CategoryDto?> GetCategoryByID(int id)

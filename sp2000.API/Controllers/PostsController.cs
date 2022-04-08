@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using sp2000.Models;
 using sp2000.Services;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 
 namespace sp2000.Controllers
 {

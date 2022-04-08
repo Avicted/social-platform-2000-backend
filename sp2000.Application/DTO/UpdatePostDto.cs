@@ -1,4 +1,4 @@
-namespace sp2000.DTO;
+namespace sp2000.Application.DTO;
 
 public class UpdatePostDto
 {

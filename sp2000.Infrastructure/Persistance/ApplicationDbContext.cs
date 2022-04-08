@@ -13,8 +13,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // optionsBuilder.UseInMemoryDatabase("sp2000");
-        optionsBuilder.UseNpgsql("Host=db;Database=postgres;Username=postgres;Password=postgres");
+        optionsBuilder.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=postgres");
     }
 
 

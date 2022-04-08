@@ -1,4 +1,4 @@
-namespace sp2000.DTO;
+namespace sp2000.Application.DTO;
 
 public class CustomApiResponse
 {
@@ -20,7 +20,7 @@ public class CustomApiResponse
     }
 
     public CustomApiResponse(
-        object payload = null,
+        object? payload = null,
         Pagination pagination = null)
     {
         this.Code = 200;

@@ -1,6 +1,6 @@
 using AutoMapper;
 using sp2000.Models;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 
 namespace sp2000.Mappings;
 

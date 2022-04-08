@@ -6,7 +6,7 @@ namespace Infrastructure;
 public interface IPostsRepository : IRepositoryBase<Post>
 {
     Task<IEnumerable<Post>> GetAllPostsInCategoryAsync(int categoryId);
-    Task<Post> GetPostByIdAsync(int id);
+    Task<Post?> GetPostByIdAsync(int id);
     void CreatePost(Post post);
     void UpdatePost(Post post);
     void DeleteCategory(Post post);

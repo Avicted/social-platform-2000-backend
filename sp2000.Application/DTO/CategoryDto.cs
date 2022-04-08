@@ -1,6 +1,6 @@
 using sp2000.Models;
 
-namespace sp2000.DTO;
+namespace sp2000.Application.DTO;
 
 public class CategoryDto : BaseEntity
 {

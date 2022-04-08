@@ -26,7 +26,7 @@ public class PostsRepository : RepositoryBase<Post>, IPostsRepository
             .ToListAsync();
     }
 
-    public async Task<Post> GetPostByIdAsync(int id)
+    public async Task<Post?> GetPostByIdAsync(int id)
     {
         return await FindByCondition(p => p.PostId == id)
             .FirstOrDefaultAsync();

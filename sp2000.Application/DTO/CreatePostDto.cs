@@ -1,4 +1,4 @@
-namespace sp2000.Models;
+namespace sp2000.Application.DTO;
 
 public class CreatePostDto
 {

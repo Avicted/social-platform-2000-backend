@@ -5,20 +5,18 @@
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspace",
-
     // Set *default* container specific settings.json values on container create.
     "settings": {},
-
     // Add the IDs of extensions you want installed when the container is created.
     "extensions": [
         "ms-dotnettools.csharp",
         "formulahendry.dotnet-test-explorer",
         "fernandoescolar.vscode-solution-explorer"
     ],
-
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    "forwardPorts": [8000, 5432],
-
+    "forwardPorts": [
+        5432
+    ],
     // [Optional] To reuse of your local HTTPS dev cert:
     //
     // 1. Export it locally using this command:
@@ -37,10 +35,8 @@
     //      1. Start the container
     //      2. Drag ~/.aspnet/https/aspnetapp.pfx into the root of the file explorer
     //      3. Open a terminal in VS Code and run "mkdir -p /home/vscode/.aspnet/https && mv aspnetapp.pfx /home/vscode/.aspnet/https"
-
     // Use 'postCreateCommand' to run commands after the container is created.
     "postCreateCommand": ".devcontainer/development_env_setup.sh",
-
     // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
     "remoteUser": "vscode"
 }

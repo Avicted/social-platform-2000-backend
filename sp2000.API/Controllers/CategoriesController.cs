@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 using sp2000.Services;
 
 namespace sp2000.Controllers
@@ -42,17 +42,13 @@ namespace sp2000.Controllers
 
         // GET: api/Category/posts
         [HttpGet("{id}/posts")]
-        public async Task<CustomApiResponse> GetPostsInCategory(int id, int? pageNumber)
+        public async Task<List<PostDto>> GetPostsInCategory(int id, int? pageNumber)
         {
             var posts = await _postsService.GetPostsInCategory(id, pageNumber);
 
-            if (posts == null || posts.Pagination.TotalItemsCount <= 0)
+            if (posts == null)
             {
-                return new CustomApiResponse(
-                    NoContent(),
-                    "No posts found",
-                    404
-                );
+                return new List<PostDto>();
             }
 
             return posts;

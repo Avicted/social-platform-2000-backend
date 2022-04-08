@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using sp2000.Models;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 
 namespace Infrastructure;
 
@@ -38,7 +38,7 @@ public class CategoriesRepository : RepositoryBase<Category>, ICategoriesReposit
     }
 
 
-    public async Task<Category> GetCategoryByIdAsync(int id)
+    public async Task<Category?> GetCategoryByIdAsync(int id)
     {
         return await FindByCondition(c => c.CategoryId == id)
             .FirstOrDefaultAsync();

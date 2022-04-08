@@ -1,6 +1,6 @@
 using sp2000.Models;
 using AutoMapper;
-using sp2000.DTO;
+using sp2000.Application.DTO;
 using sp2000.Interfaces;
 using Microsoft.Extensions.Configuration;
 
@@ -10,13 +10,11 @@ public class PostService : IPostsService
 {
     private readonly IRepositoryWrapper _repository;
     private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
 
-    public PostService(IRepositoryWrapper repository, IMapper mapper, IConfiguration configuration)
+    public PostService(IRepositoryWrapper repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _configuration = configuration;
     }
 
 
@@ -32,35 +30,22 @@ public class PostService : IPostsService
     }
 
 
-    public async Task<CustomApiResponse> GetPostsInCategory(int categoryId, int? pageNumber)
+    public async Task<List<PostDto>> GetPostsInCategory(int categoryId, int? pageNumber)
     {
         var posts = await _repository.Post.GetAllPostsInCategoryAsync(categoryId);
 
         if (posts == null)
         {
-            return new CustomApiResponse(
-                payload: new object(),
-                message: "No posts found",
-                statusCode: 204
-            );
+            return new List<PostDto>();
         }
 
         // var items = await posts.Skip(((pageNumber ?? 1) - 1) * pageSize).Take(pageSize).ToListAsync();
-        const int pageSize = 10;
+        // const int pageSize = 10;
         // var items = await PaginatedList<Post>.CreateAsync(posts, pageNumber ?? 1, pageSize);
 
         var result = _mapper.Map<List<PostDto>>(posts);
 
-        return new CustomApiResponse(
-            payload: result,
-            new Pagination
-            {
-                CurrentPage = pageNumber ?? 1,
-                PageSize = pageSize,
-                TotalItemsCount = result.Count(),
-                TotalPages = (int)Math.Ceiling(result.Count() / (double)pageSize)
-            }
-        );
+        return result;
     }
 
     public async Task<PostDto?> GetPostByID(int id)
