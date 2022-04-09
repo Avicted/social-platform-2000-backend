@@ -18,7 +18,7 @@ namespace sp2000.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostDto>> GetPost(int id)
+        public async Task<IActionResult> GetPost(int id)
         {
             var post = await _postsService.GetPostByID(id);
 
@@ -27,7 +27,7 @@ namespace sp2000.Controllers
                 return NotFound();
             }
 
-            return post;
+            return Ok(post);
         }
 
         // PUT: api/Posts/5
@@ -48,7 +48,7 @@ namespace sp2000.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PostDto>> CreatePost(CreatePostDto post)
+        public async Task<IActionResult> CreatePost(CreatePostDto post)
         {
             var createdPost = await _postsService.CreatePost(post);
 
@@ -57,7 +57,7 @@ namespace sp2000.Controllers
                 return NotFound();
             }
 
-            return createdPost;
+            return Ok(createdPost);
 
         }
 

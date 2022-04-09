@@ -17,6 +17,10 @@ namespace sp2000.Controllers
             _postsService = postsService;
         }
 
+        // @Note(Avic): What should we return from the controllers? IActionResult, ActionResult<T>
+        // or a specific type e.g. List<CategoryDto> ?
+        // Answer: https://stackoverflow.com/questions/54432916/asp-net-core-api-actionresultt-vs-async-taskt
+
         // GET: api/Category
         [HttpGet]
         public async Task<IActionResult> GetCategories(int? pageNumber)
@@ -47,16 +51,16 @@ namespace sp2000.Controllers
 
         // GET: api/Category/posts
         [HttpGet("{id}/posts")]
-        public async Task<List<PostDto>> GetPostsInCategory(int id, int? pageNumber)
+        public async Task<IActionResult> GetPostsInCategory(int id, int? pageNumber)
         {
             var posts = await _postsService.GetPostsInCategory(id, pageNumber);
 
             if (posts == null)
             {
-                return new List<PostDto>();
+                return NotFound(new List<PostDto>());
             }
 
-            return posts;
+            return Ok(posts);
         }
 
         // PUT: api/Category/5
@@ -77,7 +81,7 @@ namespace sp2000.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CategoryDto>> PostCategory(CreateCategoryDto category)
+        public async Task<IActionResult> PostCategory(CreateCategoryDto category)
         {
             if (category.Title == null || !ModelState.IsValid)
             {
@@ -85,7 +89,7 @@ namespace sp2000.Controllers
             }
 
             var createdCategory = await _categoryService.CreateCategory(category);
-            return createdCategory;
+            return Ok(createdCategory);
         }
 
         // DELETE: api/Category/5
