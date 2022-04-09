@@ -74,9 +74,10 @@ namespace sp2000.UnitTests
             var fakeCategories = GetFakeCategories();
 
             var categoriesService = A.Fake<ICategoriesService>();
+            var postsService = A.Fake<IPostsService>();
+
             A.CallTo(() => categoriesService.GetCategories(null)).Returns(Task.FromResult(fakeCategories));
 
-            var postsService = A.Fake<IPostsService>();
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
@@ -98,9 +99,10 @@ namespace sp2000.UnitTests
             var fakeCategories = new List<CategoryDto>();
 
             var categoriesService = A.Fake<ICategoriesService>();
-            A.CallTo(() => categoriesService.GetCategories(null)).Returns(Task.FromResult(fakeCategories));
-
             var postsService = A.Fake<IPostsService>();
+
+            A.CallTo(() => categoriesService.GetCategories(It.IsAny<int>())).Returns(Task.FromResult(fakeCategories));
+
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
@@ -145,13 +147,13 @@ namespace sp2000.UnitTests
         {
             // Arrage
             var categoriesService = A.Fake<ICategoriesService>();
-            A.CallTo(() => categoriesService.GetCategoryByID(1337)).Returns(Task.FromResult<CategoryDto?>(null));
+            A.CallTo(() => categoriesService.GetCategoryByID(2000)).Returns(Task.FromResult<CategoryDto?>(null));
 
             var postsService = A.Fake<IPostsService>();
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
-            var actionResult = await controller.GetCategoryByID(1337);
+            var actionResult = await controller.GetCategoryByID(2000);
 
             // Assert
             Assert.IsType<NotFoundResult>(actionResult);
@@ -163,12 +165,12 @@ namespace sp2000.UnitTests
             // Arrage
             var categoriesService = A.Fake<ICategoriesService>();
             var postsService = A.Fake<IPostsService>();
-            A.CallTo(() => postsService.GetPostsInCategory(2, null)).Returns(Task.FromResult(GetFakePosts()));
+            A.CallTo(() => postsService.GetPostsInCategory(1, null)).Returns(Task.FromResult(GetFakePosts()));
 
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
-            var actionResult = await controller.GetPostsInCategory(2, null);
+            var actionResult = await controller.GetPostsInCategory(1, null);
 
             // Assert
             Assert.NotNull(actionResult);
@@ -190,15 +192,17 @@ namespace sp2000.UnitTests
             // Arrage
             var categoriesService = A.Fake<ICategoriesService>();
             var postsService = A.Fake<IPostsService>();
-            A.CallTo(() => postsService.GetPostsInCategory(2, null)).Returns(Task.FromResult(GetFakePosts()));
+            var fakeCategories = new List<PostDto>();
+
+            A.CallTo(() => postsService.GetPostsInCategory(2000, null)).Returns(Task.FromResult<List<PostDto>>(null));
 
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
-            var actionResult = await controller.GetPostsInCategory(2, null);
+            var actionResult = await controller.GetPostsInCategory(2000, null);
 
             // Assert
-            Assert.IsType<NotFoundResult>(actionResult);
+            Assert.IsType<NotFoundObjectResult>(actionResult);
         }
 
         [Fact]
@@ -221,12 +225,13 @@ namespace sp2000.UnitTests
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
-            var actionResult = controller.PutCategory(1, updateCategory);
+            var actionResult = await controller.PutCategory(1, updateCategory);
 
             // Assert
             Assert.NotNull(actionResult);
 
-            var result = actionResult.Result as CategoryDto;
+            var okResult = (OkObjectResult)actionResult;
+            var result = okResult.Value as CategoryDto;
 
             var obj1Str = JsonConvert.SerializeObject(fakeCategory);
             var obj2Str = JsonConvert.SerializeObject(result);
@@ -248,40 +253,115 @@ namespace sp2000.UnitTests
             var fakeCategory = GetFakeCategories().First();
             fakeCategory.Title = updateCategory.Title;
 
-            A.CallTo(() => categoriesService.UpdateCategory(1, updateCategory)).Returns(Task.FromResult<CategoryDto?>(null));
+            A.CallTo(() => categoriesService.UpdateCategory(2000, updateCategory)).Returns(Task.FromResult<CategoryDto?>(null));
 
             var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
-            var actionResult = controller.PutCategory(1, updateCategory);
+            var actionResult = await controller.PutCategory(2000, updateCategory);
 
             // Assert
-            Assert.Null(actionResult);
             Assert.IsType<NotFoundResult>(actionResult);
         }
 
         [Fact]
-        public async void PostCategory_Returns_Created_Category()
+        public async void CreateCategory_Returns_Created_Category()
         {
+            // Arrange
+            var _categoriesService = A.Fake<ICategoriesService>();
+            var _postsService = A.Fake<IPostsService>();
 
+            var newCategory = new CreateCategoryDto()
+            {
+                Title = "This is the title of a new category"
+            };
+
+            var fakeCategories = GetFakeCategories();
+            var createdCategory = fakeCategories.First();
+            createdCategory.Title = newCategory.Title;
+
+            A.CallTo(() => _categoriesService.CreateCategory(newCategory)).Returns(Task.FromResult(createdCategory));
+
+            var controller = new CategoriesController(_categoriesService, _postsService);
+
+            // Act
+            var actionResult = await controller.CreateCategory(newCategory);
+
+            // Assert
+            Assert.NotNull(actionResult);
+
+            var okResult = actionResult as OkObjectResult;
+            var result = okResult?.Value as CategoryDto;
+
+            var obj1Str = JsonConvert.SerializeObject(createdCategory);
+            var obj2Str = JsonConvert.SerializeObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Fact]
-        public async void PostCategory_Returns_BadRequest_On_Invalid_Model()
+        public async void CreateCategory_Returns_BadRequest_On_Invalid_Model()
         {
+            // Arrange
+            var categoriesService = A.Fake<ICategoriesService>();
+            var postsService = A.Fake<IPostsService>();
 
+            var newCategory = new CreateCategoryDto()
+            {
+                // Title is missing here, the model is invalid
+            };
+
+            var fakeCategories = GetFakeCategories();
+            var createdCategory = fakeCategories.First();
+            createdCategory.Title = newCategory.Title;
+
+            A.CallTo(() => categoriesService.CreateCategory(It.IsAny<CreateCategoryDto>())).Returns(Task.FromResult(createdCategory));
+
+            var controller = new CategoriesController(categoriesService, postsService);
+
+            // Act
+            var actionResult = await controller.CreateCategory(newCategory);
+
+            // Assert
+            Assert.NotNull(actionResult);
+            Assert.IsType<BadRequestObjectResult>(actionResult);
         }
 
         [Fact]
         public async void DeleteCategory_Returns_Ok_NoContent()
         {
+            // Arrange
+            var categoriesService = A.Fake<ICategoriesService>();
+            var postsService = A.Fake<IPostsService>();
 
+            A.CallTo(() => categoriesService.DeleteCategory(It.IsAny<int>())).Returns(Task.FromResult(true));
+
+            var controller = new CategoriesController(categoriesService, postsService);
+
+            // Act
+            var actionResult = await controller.DeleteCategory(1);
+
+            // Assert
+            Assert.NotNull(actionResult);
+            Assert.IsType<NotFoundResult>(actionResult);
         }
 
         [Fact]
         public async void DeleteCategory_Returns_NotFound()
         {
+            // Arrange
+            var categoriesService = A.Fake<ICategoriesService>();
+            var postsService = A.Fake<IPostsService>();
 
+            A.CallTo(() => categoriesService.DeleteCategory(It.IsAny<int>())).Returns(Task.FromResult(false));
+
+            var controller = new CategoriesController(categoriesService, postsService);
+
+            // Act
+            var actionResult = await controller.DeleteCategory(1);
+
+            // Assert
+            Assert.NotNull(actionResult);
+            Assert.IsType<NotFoundResult>(actionResult);
         }
     }
 }

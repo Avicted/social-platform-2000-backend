@@ -81,7 +81,7 @@ namespace sp2000.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostCategory(CreateCategoryDto category)
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto category)
         {
             if (category.Title == null || !ModelState.IsValid)
             {
@@ -89,6 +89,12 @@ namespace sp2000.Controllers
             }
 
             var createdCategory = await _categoryService.CreateCategory(category);
+                
+            if (createdCategory == null)
+            {
+                return BadRequest("The category could not be created");
+            }
+
             return Ok(createdCategory);
         }
 
