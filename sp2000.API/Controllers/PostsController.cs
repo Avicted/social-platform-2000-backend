@@ -18,7 +18,7 @@ namespace sp2000.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPost(int id)
+        public async Task<IActionResult> GetPostByID(int id)
         {
             var post = await _postsService.GetPostByID(id);
 
@@ -50,15 +50,13 @@ namespace sp2000.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(CreatePostDto post)
         {
-            var createdPost = await _postsService.CreatePost(post);
-
-            if (createdPost == null)
+            if (post.Title == null || !ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
+            var createdPost = await _postsService.CreatePost(post);
             return Ok(createdPost);
-
         }
 
         // DELETE: api/Posts/5

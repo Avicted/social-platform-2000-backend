@@ -206,7 +206,7 @@ namespace sp2000.UnitTests
         }
 
         [Fact]
-        public async void PutCategory_Returns_UpdatedCategory() 
+        public async void PutCategory_Returns_UpdatedCategory()
         {
             // Arrage
             var updateCategory = new UpdateCategoryDto()
@@ -250,9 +250,6 @@ namespace sp2000.UnitTests
             var categoriesService = A.Fake<ICategoriesService>();
             var postsService = A.Fake<IPostsService>();
 
-            var fakeCategory = GetFakeCategories().First();
-            fakeCategory.Title = updateCategory.Title;
-
             A.CallTo(() => categoriesService.UpdateCategory(2000, updateCategory)).Returns(Task.FromResult<CategoryDto?>(null));
 
             var controller = new CategoriesController(categoriesService, postsService);
@@ -268,8 +265,8 @@ namespace sp2000.UnitTests
         public async void CreateCategory_Returns_Created_Category()
         {
             // Arrange
-            var _categoriesService = A.Fake<ICategoriesService>();
-            var _postsService = A.Fake<IPostsService>();
+            var categoriesService = A.Fake<ICategoriesService>();
+            var postsService = A.Fake<IPostsService>();
 
             var newCategory = new CreateCategoryDto()
             {
@@ -280,9 +277,9 @@ namespace sp2000.UnitTests
             var createdCategory = fakeCategories.First();
             createdCategory.Title = newCategory.Title;
 
-            A.CallTo(() => _categoriesService.CreateCategory(newCategory)).Returns(Task.FromResult(createdCategory));
+            A.CallTo(() => categoriesService.CreateCategory(newCategory)).Returns(Task.FromResult(createdCategory));
 
-            var controller = new CategoriesController(_categoriesService, _postsService);
+            var controller = new CategoriesController(categoriesService, postsService);
 
             // Act
             var actionResult = await controller.CreateCategory(newCategory);

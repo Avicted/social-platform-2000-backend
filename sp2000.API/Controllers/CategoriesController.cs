@@ -89,11 +89,6 @@ namespace sp2000.Controllers
             }
 
             var createdCategory = await _categoryService.CreateCategory(category);
-                
-            if (createdCategory == null)
-            {
-                return BadRequest("The category could not be created");
-            }
 
             return Ok(createdCategory);
         }
