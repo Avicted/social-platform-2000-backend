@@ -33,7 +33,7 @@ namespace sp2000.Controllers
 
         // GET: api/Category/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public async Task<IActionResult> GetCategoryByID(int id)
         {
             var category = await _categoryService.GetCategoryByID(id);
 

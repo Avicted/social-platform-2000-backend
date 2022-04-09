@@ -91,7 +91,7 @@ namespace sp2000.UnitTests
         }
 
         [Fact]
-        public async void GetCategories_Returns_An_Empty_List_Of_Categories()
+        public async void GetCategories_Returns_NotFound()
         {
             // Arrange
             var fakePosts = GetFakePosts();
@@ -107,6 +107,57 @@ namespace sp2000.UnitTests
             // Act
             var actionResult = await controller.GetCategories(null);
 
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult);
+        }
+
+        [Fact]
+        public async void GetCategoryById_Returns_A_Category()
+        {
+            // Arrage
+            var fakeCategory = new CategoryDto()
+            {
+                CategoryId = 1337,
+                Title = "This is a category title",
+                PostsCount = 0,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+            };
+
+
+            var categoriesService = A.Fake<ICategoriesService>();
+            A.CallTo(() => categoriesService.GetCategoryByID(1337)).Returns(Task.FromResult(fakeCategory));
+
+            var postsService = A.Fake<IPostsService>();
+            var controller = new CategoriesController(categoriesService, postsService);
+
+
+            // Act
+            var actionResult = await controller.GetCategoryByID(1337);
+
+
+            // Assert
+            var okResult = (OkObjectResult)actionResult;
+            Assert.NotNull(okResult);
+
+            var result = okResult.Value as CategoryDto;
+            Assert.Equal(fakeCategory, result);
+        }
+
+        [Fact]
+        public async void GetCategoryById_Returns_NotFound()
+        {
+            // Arrage
+            var categoriesService = A.Fake<ICategoriesService>();
+           A.CallTo(() => categoriesService.GetCategoryByID(1337)).Returns(Task.FromResult<CategoryDto?>(null));
+
+            var postsService = A.Fake<IPostsService>();
+            var controller = new CategoriesController(categoriesService, postsService);
+
+
+            // Act
+            var actionResult = await controller.GetCategoryByID(1337);
 
             // Assert
             Assert.IsType<NotFoundResult>(actionResult);
