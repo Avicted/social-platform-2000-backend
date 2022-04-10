@@ -4,9 +4,16 @@ namespace Infrastructure;
 
 public class RespositoryWrapper : IRepositoryWrapper
 {
-    private ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context;
     private ICategoriesRepository _category;
     private IPostsRepository _post;
+
+    public RespositoryWrapper(ApplicationDbContext context)
+    {
+        _context = context;
+        _category = new CategoriesRepository(_context);
+        _post = new PostsRepository(_context);
+    }
 
     public ICategoriesRepository Category
     {
@@ -34,10 +41,7 @@ public class RespositoryWrapper : IRepositoryWrapper
         }
     }
 
-    public RespositoryWrapper(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    
 
     public async Task SaveAsync()
     {

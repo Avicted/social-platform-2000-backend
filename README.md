@@ -17,7 +17,7 @@ dotnet ef migrations add "<name_of_migration>" --project sp2000.Infrastructure -
 Update the database with the migration(s):
 
 ```bash
-dotnet-ef database update
+dotnet-ef database update --project sp2000.API/sp2000.API.csproj
 ```
 
 # Architecture

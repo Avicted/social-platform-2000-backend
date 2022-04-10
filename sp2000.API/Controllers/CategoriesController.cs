@@ -90,7 +90,7 @@ namespace sp2000.Controllers
 
             var createdCategory = await _categoryService.CreateCategory(category);
 
-            return Ok(createdCategory);
+            return CreatedAtAction(nameof(createdCategory), createdCategory);
         }
 
         // DELETE: api/Category/5

@@ -21,7 +21,7 @@ public class CategoriesService : ICategoriesService
     {
         var entity = _mapper.Map<Category>(category);
 
-        _repository.Category.Create(entity);
+        _repository.Category.CreateCategory(entity);
 
         await _repository.SaveAsync();
 
@@ -89,7 +89,7 @@ public class CategoriesService : ICategoriesService
         // Validate entity is not null
         if (entity != null)
         {
-            _repository.Category.Delete(entity);
+            _repository.Category.DeleteCategory(entity);
 
             // Save changes to the database
             await _repository.SaveAsync();

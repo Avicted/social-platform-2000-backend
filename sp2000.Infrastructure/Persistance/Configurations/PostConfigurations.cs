@@ -9,6 +9,10 @@ public class PostEntityTypeConfiguration : IEntityTypeConfiguration<Post>
     public void Configure(EntityTypeBuilder<Post> builder)
     {
         builder
+           .HasMany(p => p.Comments)
+           .WithOne();
+
+        builder
             .Property(p => p.Title)
             .IsRequired()
             .HasMaxLength(64);

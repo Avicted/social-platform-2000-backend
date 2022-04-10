@@ -56,7 +56,7 @@ namespace sp2000.Controllers
             }
 
             var createdPost = await _postsService.CreatePost(post);
-            return Ok(createdPost);
+            return CreatedAtAction(nameof(createdPost), createdPost);
         }
 
         // DELETE: api/Posts/5

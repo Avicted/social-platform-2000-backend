@@ -1,3 +1,5 @@
+using sp2000.Application.Models;
+
 namespace sp2000.Models;
 
 public class Post : BaseEntity
@@ -10,4 +12,6 @@ public class Post : BaseEntity
     // @Note(Avic): EFCore convention
     // Navigation property
     public int CategoryId { get; set; }
+
+    public List<Comment> Comments { get; set; } = null!;
 }
