@@ -1,4 +1,5 @@
 using Infrastructure;
+using sp2000.Application.Interfaces;
 
 namespace sp2000.Interfaces;
 
@@ -9,5 +10,6 @@ public interface IRepositoryWrapper
 {
     ICategoriesRepository Category { get; }
     IPostsRepository Post { get; }
+    ICommentsRepository Comment { get; }
     Task SaveAsync();
 }

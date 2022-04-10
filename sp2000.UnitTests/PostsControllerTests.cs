@@ -178,7 +178,7 @@ public class PostsControllerTests
         // Assert
         Assert.NotNull(actionResult);
 
-        var okResult = actionResult as OkObjectResult;
+        var okResult = actionResult as CreatedAtActionResult;
         var result = okResult?.Value as PostDto;
 
         var obj1Str = JsonConvert.SerializeObject(fakeCreatedPost);

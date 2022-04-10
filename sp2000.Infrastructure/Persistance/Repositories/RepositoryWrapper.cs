@@ -1,3 +1,4 @@
+using sp2000.Application.Interfaces;
 using sp2000.Interfaces;
 
 namespace Infrastructure;
@@ -7,12 +8,14 @@ public class RespositoryWrapper : IRepositoryWrapper
     private readonly ApplicationDbContext _context;
     private ICategoriesRepository _category;
     private IPostsRepository _post;
+    private ICommentsRepository _comment;
 
     public RespositoryWrapper(ApplicationDbContext context)
     {
         _context = context;
         _category = new CategoriesRepository(_context);
         _post = new PostsRepository(_context);
+        _comment = new CommentsRepository(_context);
     }
 
     public ICategoriesRepository Category
@@ -41,7 +44,18 @@ public class RespositoryWrapper : IRepositoryWrapper
         }
     }
 
-    
+    public ICommentsRepository Comment
+    {
+        get
+        {
+            if (_comment == null)
+            {
+                _comment = new CommentsRepository(_context);
+            }
+
+            return _comment;
+        }
+    }
 
     public async Task SaveAsync()
     {

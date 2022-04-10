@@ -30,7 +30,7 @@ public class CategoriesService : ICategoriesService
 
     public async Task<List<CategoryDto>> GetCategories(int? pageNumber)
     {
-        var categories = await _repository.Category.GetAllGategoriesAsync();
+        var categories = await _repository.Category.GetAllCategoriesAsync();
 
         if (categories == null)
         {
@@ -39,7 +39,6 @@ public class CategoriesService : ICategoriesService
         // const int pageSize = 10;
         // var temp = await PaginatedList<Category>.CreateAsync((IQueryable<Category>)categories, pageNumber ?? 1, pageSize);
         var result = _mapper.Map<List<CategoryDto>>(categories);
-
 
         return result;
     }

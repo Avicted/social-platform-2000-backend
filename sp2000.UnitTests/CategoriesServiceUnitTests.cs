@@ -48,7 +48,7 @@ public class CategoriesServiceUnitTests
         };
     }
 
-    [Fact]
+    /*[Fact]
     public async void GetCategories_Returns_Categories()
     {
         // Arrange
@@ -67,9 +67,9 @@ public class CategoriesServiceUnitTests
         Assert.NotNull(result);
         Assert.IsAssignableFrom<List<CategoryDto>>(result);
         Assert.Equal(fakeCategories.Count, result.Count);
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async void GetCategories_Returns_An_Empty_List_Of_Categories()
     {
         // Arrange
@@ -86,9 +86,9 @@ public class CategoriesServiceUnitTests
 
         // Assert
         Assert.Equal(result, new List<CategoryDto>());
-    }
+    }*/
 
-    [Fact]
+    /*[Fact]
     public async void CreateCategory_Returns_The_Created_Category()
     {
         // Arrange
@@ -137,5 +137,5 @@ public class CategoriesServiceUnitTests
             // Assert
             Assert.Equal(newCategory.Title, result.Title);
         }
-    }
+    }*/
 }

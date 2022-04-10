@@ -12,7 +12,7 @@ public class CategoriesRepository : RepositoryBase<Category>, ICategoriesReposit
     {
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetAllGategoriesAsync()
+    public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
     {
         return await FindAll()
             .Include(c => c.Posts)

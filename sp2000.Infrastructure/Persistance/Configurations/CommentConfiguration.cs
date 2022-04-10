@@ -8,12 +8,19 @@ namespace sp2000.Infrastructure.Persistance.Configurations
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
-            builder
-                .Property(p => p.Content)
-                .IsRequired();
 
             builder
                 .Property(p => p.PostId)
+                .IsRequired();
+
+            builder
+                .Property(p => p.AuthorName)
+                .HasMaxLength(30)
+                .IsRequired();
+
+            builder
+                .Property(p => p.Content)
+                .HasMaxLength(4096)
                 .IsRequired();
         }
     }

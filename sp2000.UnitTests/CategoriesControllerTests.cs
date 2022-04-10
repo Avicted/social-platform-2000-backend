@@ -287,7 +287,7 @@ public class CategoriesControllerTests
         // Assert
         Assert.NotNull(actionResult);
 
-        var okResult = actionResult as OkObjectResult;
+        var okResult = actionResult as CreatedAtActionResult;
         var result = okResult?.Value as CategoryDto;
 
         var obj1Str = JsonConvert.SerializeObject(createdCategory);

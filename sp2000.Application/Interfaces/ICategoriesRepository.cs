@@ -6,7 +6,7 @@ namespace Infrastructure;
 
 public interface ICategoriesRepository : IRepositoryBase<Category>
 {
-    Task<IEnumerable<CategoryDto>> GetAllGategoriesAsync();
+    Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
     Task<Category?> GetCategoryByIdAsync(int id);
     void CreateCategory(Category category);
     void UpdateCategory(Category category);
