@@ -11,7 +11,7 @@ Run:
 Create a new database migration:
 
 ```bash
-dotnet ef migrations add "<name_of_migration>" --project sp2000.Infrastructure --startup-project sp2000.API --output-dir sp2000.Infrastructure/Persistence/Migrations
+dotnet ef migrations add "<name_of_migration>" --project sp2000.Infrastructure --startup-project sp2000.API --output-dir Persistance/Migrations
 ```
 
 Update the database with the migration(s):

@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace sp2000.Infrastructure.sp2000.InfrastructurePersistenceMigrations
+namespace sp2000.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220411155759_AddingParentCommentIdToComments")]
-    partial class AddingParentCommentIdToComments
+    [Migration("20220411163424_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,30 @@ namespace sp2000.Infrastructure.sp2000.InfrastructurePersistenceMigrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("sp2000.Application.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("sp2000.Application.Models.Comment", b =>
                 {
@@ -58,34 +82,10 @@ namespace sp2000.Infrastructure.sp2000.InfrastructurePersistenceMigrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("sp2000.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("sp2000.Models.Post", b =>
+            modelBuilder.Entity("sp2000.Application.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
                         .ValueGeneratedOnAdd()
@@ -120,28 +120,28 @@ namespace sp2000.Infrastructure.sp2000.InfrastructurePersistenceMigrations
 
             modelBuilder.Entity("sp2000.Application.Models.Comment", b =>
                 {
-                    b.HasOne("sp2000.Models.Post", null)
+                    b.HasOne("sp2000.Application.Models.Post", null)
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("sp2000.Models.Post", b =>
+            modelBuilder.Entity("sp2000.Application.Models.Post", b =>
                 {
-                    b.HasOne("sp2000.Models.Category", null)
+                    b.HasOne("sp2000.Application.Models.Category", null)
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("sp2000.Models.Category", b =>
+            modelBuilder.Entity("sp2000.Application.Models.Category", b =>
                 {
                     b.Navigation("Posts");
                 });
 
-            modelBuilder.Entity("sp2000.Models.Post", b =>
+            modelBuilder.Entity("sp2000.Application.Models.Post", b =>
                 {
                     b.Navigation("Comments");
                 });

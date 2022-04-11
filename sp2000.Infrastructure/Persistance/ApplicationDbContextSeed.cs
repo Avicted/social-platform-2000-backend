@@ -98,10 +98,40 @@ public static class ApplicationDbContextSeed
                 Content = "The content here is quite short",
             });
 
+            await context.SaveChangesAsync();
+
+
 
             context.Comments.Add(new Comment
             {
-
+                CommentId = 100,
+                AuthorName = "Jane DoeDoeDoeDoeDoeSurname",
+                Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida auctor est, in varius augue interdum ac. Praesent pharetra mattis nisl at suscipit.",
+                PostId = 1,
+            });
+            context.Comments.Add(new Comment
+            {
+                CommentId = 101,
+                AuthorName = "Bob",
+                Content = "Steave bob is the best painter in the world",
+                PostId = 1,
+                ParentCommentId = 100,
+            });
+            context.Comments.Add(new Comment
+            {
+                CommentId = 102,
+                AuthorName = "Alice",
+                Content = "Hello Team!",
+                PostId = 1,
+                ParentCommentId = 101,
+            });
+            context.Comments.Add(new Comment
+            {
+                CommentId = 103,
+                AuthorName = "BobAlice1337",
+                Content = "I dont think så",
+                PostId = 1,
+                ParentCommentId = 100,
             });
 
 
