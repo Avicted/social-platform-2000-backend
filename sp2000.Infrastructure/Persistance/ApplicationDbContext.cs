@@ -50,6 +50,6 @@ public class ApplicationDbContext : DbContext
             }
         }
 
-        return base.SaveChanges();
+        return await base.SaveChangesAsync();
     }
 }
