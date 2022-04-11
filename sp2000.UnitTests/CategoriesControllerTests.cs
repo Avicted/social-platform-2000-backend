@@ -156,7 +156,7 @@ public class CategoriesControllerTests
         var actionResult = await controller.GetCategoryByID(2000);
 
         // Assert
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -258,7 +258,7 @@ public class CategoriesControllerTests
         var actionResult = await controller.PutCategory(2000, updateCategory);
 
         // Assert
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -339,7 +339,7 @@ public class CategoriesControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -358,6 +358,6 @@ public class CategoriesControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 }

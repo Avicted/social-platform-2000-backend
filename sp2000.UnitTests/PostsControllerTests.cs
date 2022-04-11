@@ -87,7 +87,7 @@ public class PostsControllerTests
         var actionResult = await controller.GetPostByID(1);
 
         // Assert
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -152,7 +152,7 @@ public class PostsControllerTests
         var actionResult = await controller.PutPost(2000, updatePost);
 
         // Assert
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -237,7 +237,7 @@ public class PostsControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 
     [Fact]
@@ -256,6 +256,6 @@ public class PostsControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundResult>(actionResult);
+        Assert.IsType<NotFoundObjectResult>(actionResult);
     }
 }

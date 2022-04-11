@@ -55,7 +55,7 @@ public class CategoriesController : ControllerBase
     {
         var posts = await _postsService.GetPostsInCategory(id, pageNumber);
 
-        if (posts.Count <= 0)
+        if (posts == null || posts.Count <= 0)
         {
             return NotFound("No posts found in category");
         }
