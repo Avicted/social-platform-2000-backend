@@ -1,22 +1,6 @@
-﻿using Xunit;
-using Moq;
-using System;
-using FakeItEasy;
+﻿using System;
 using sp2000.Application.DTO;
-using sp2000.Services;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using sp2000.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Linq;
-using sp2000.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using sp2000.Models;
-using AutoMapper;
-using Infrastructure;
-using System.Threading;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace sp2000.UnitTests;
 public class CategoriesServiceUnitTests
