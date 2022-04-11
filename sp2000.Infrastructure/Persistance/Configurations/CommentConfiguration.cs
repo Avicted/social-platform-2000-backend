@@ -10,18 +10,22 @@ namespace sp2000.Infrastructure.Persistance.Configurations
         {
 
             builder
-                .Property(p => p.PostId)
+                .Property(c => c.PostId)
                 .IsRequired();
 
             builder
-                .Property(p => p.AuthorName)
+                .Property(c => c.AuthorName)
                 .HasMaxLength(30)
                 .IsRequired();
 
             builder
-                .Property(p => p.Content)
-                .HasMaxLength(4096)
+                .Property(c => c.Content)
+                .HasMaxLength(10000) // @Note(Avic): Reddit uses 10k
                 .IsRequired();
+
+            builder
+                .Property(c => c.ParentCommentId)
+                .IsRequired(false); // @Note(Avic): A comment without ParentCommentId belongs to the root of the Post
         }
     }
 }

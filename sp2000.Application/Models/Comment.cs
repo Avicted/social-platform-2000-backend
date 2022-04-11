@@ -10,4 +10,6 @@ public class Comment : BaseEntity
     // @Note(Avic): EFCore convention
     // Navigation property
     public int PostId { get; set; }
+
+    public int? ParentCommentId { get; set; }
 }
