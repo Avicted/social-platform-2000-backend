@@ -81,7 +81,8 @@ app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
 {
     ShowApiVersion = true,
     ShowStatusCode = true,
-    UseCustomSchema = true
+    UseCustomSchema = true,
+    UseApiProblemDetailsException = true
 });
 
 

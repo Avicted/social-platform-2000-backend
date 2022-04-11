@@ -84,10 +84,10 @@ public class CategoriesControllerTests
         var actionResult = await controller.GetCategories(null);
 
         // Assert
-        var okResult = (OkObjectResult)actionResult;
+        var okResult = (CustomApiResponse)actionResult;
         Assert.NotNull(okResult);
 
-        var result = okResult.Value as List<CategoryDto>;
+        var result = okResult.Payload as List<CategoryDto>;
         Assert.Equal(fakeCategories.Count, result?.Count);
     }
 
@@ -135,10 +135,10 @@ public class CategoriesControllerTests
         var actionResult = await controller.GetCategoryByID(1337);
 
         // Assert
-        var okResult = (OkObjectResult)actionResult;
+        var okResult = (CustomApiResponse)actionResult;
         Assert.NotNull(okResult);
 
-        var result = okResult.Value as CategoryDto;
+        var result = okResult.Payload as CategoryDto;
         Assert.Equal(fakeCategory, result);
     }
 
@@ -175,8 +175,8 @@ public class CategoriesControllerTests
         // Assert
         Assert.NotNull(actionResult);
 
-        var okResult = (OkObjectResult)actionResult;
-        var result = okResult.Value as List<PostDto>;
+        var okResult = (CustomApiResponse)actionResult;
+        var result = okResult.Payload as List<PostDto>;
 
         PostDto? fakePost = GetFakePosts().Find(p => p.PostId == 1);
 
@@ -230,8 +230,8 @@ public class CategoriesControllerTests
         // Assert
         Assert.NotNull(actionResult);
 
-        var okResult = (OkObjectResult)actionResult;
-        var result = okResult.Value as CategoryDto;
+        var okResult = (CustomApiResponse)actionResult;
+        var result = okResult.Payload as CategoryDto;
 
         var obj1Str = JsonConvert.SerializeObject(fakeCategory);
         var obj2Str = JsonConvert.SerializeObject(result);
@@ -287,8 +287,8 @@ public class CategoriesControllerTests
         // Assert
         Assert.NotNull(actionResult);
 
-        var okResult = actionResult as CreatedAtActionResult;
-        var result = okResult?.Value as CategoryDto;
+        var okResult = actionResult as CustomApiResponse;
+        var result = okResult?.Payload as CategoryDto;
 
         var obj1Str = JsonConvert.SerializeObject(createdCategory);
         var obj2Str = JsonConvert.SerializeObject(result);

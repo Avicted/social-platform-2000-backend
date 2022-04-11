@@ -4,36 +4,36 @@ public class CustomApiResponse
 {
     public int Code { get; set; }
     public string Message { get; set; }
-    public object Payload { get; set; }
+    public object Result { get; set; }
     public Pagination Pagination { get; set; }
 
     public CustomApiResponse(
-        object payload = null!,
+        object result = null!,
         string message = "",
         int statusCode = 200,
         Pagination pagination = null!)
     {
         this.Code = statusCode;
         this.Message = message == string.Empty ? "Success" : message;
-        this.Payload = payload;
+        this.Result = result;
         this.Pagination = pagination;
     }
 
     public CustomApiResponse(
-        object? payload = null,
+        object? result = null,
         Pagination pagination = null!)
     {
         this.Code = 200;
         this.Message = "Success";
-        this.Payload = payload!;
+        this.Result = result!;
         this.Pagination = pagination;
     }
 
-    public CustomApiResponse(object payload)
+    public CustomApiResponse(object result)
     {
         this.Code = 200;
         this.Message = string.Empty;
-        this.Payload = payload!;
+        this.Result = result!;
         this.Pagination = null!;
     }
 }

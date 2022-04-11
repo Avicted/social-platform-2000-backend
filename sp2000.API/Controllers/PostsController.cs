@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using sp2000.Services;
 using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
+using AutoWrapper.Wrappers;
+using Microsoft.AspNetCore.Http;
 
 namespace sp2000.Controllers;
 
@@ -20,71 +22,81 @@ public class PostsController : ControllerBase
 
     // GET: api/Posts/5
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPostByID(int id)
+    public async Task<CustomApiResponse> GetPostByID(int id)
     {
         var post = await _postsService.GetPostByID(id);
 
         if (post == null)
         {
-            return NotFound("Post not found");
+            // return NotFound("Post not found");
+            return new CustomApiResponse(message: "Post not found", statusCode: 404);
         }
 
-        return Ok(post);
+        // return Ok(post);
+        return new CustomApiResponse(post);
     }
 
     // PUT: api/Posts/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutPost(int id, UpdatePostDto post)
+    public async Task<CustomApiResponse> PutPost(int id, UpdatePostDto post)
     {
         var updatedPost = await _postsService.UpdatePost(id, post);
 
         if (updatedPost == null)
         {
-            return NotFound("Post not found");
+            // return NotFound("Post not found");
+            return new CustomApiResponse(message: "Post not found", statusCode: 404);
         }
 
-        return Ok(updatedPost);
+        // return Ok(updatedPost);
+        return new CustomApiResponse(updatedPost);
     }
 
     // POST: api/Posts
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<IActionResult> CreatePost(CreatePostDto post)
+    public async Task<CustomApiResponse> CreatePost(CreatePostDto post)
     {
-        if (post.Title == null || !ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            // return BadRequest(ModelState);
+            throw new ApiProblemDetailsException(ModelState);
         }
 
         var createdPost = await _postsService.CreatePost(post);
-        return CreatedAtAction(nameof(createdPost), createdPost);
+        // return CreatedAtAction(nameof(createdPost), createdPost);
+        return new CustomApiResponse(createdPost, statusCode: 201);
     }
 
     // DELETE: api/Posts/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePost(int id)
+    public async Task<CustomApiResponse> DeletePost(int id)
     {
         bool isDeleted = await _postsService.DeletePost(id);
 
         if (!isDeleted)
         {
-            return NotFound("Post not found");
+            // return NotFound("Post not found");
+            return new CustomApiResponse(message: "Post not found", statusCode: 404);
         }
 
-        return NoContent();
+        // return NoContent();
+        return new CustomApiResponse(statusCode: 204);
     }
 
     [HttpGet("{postId}/comments")]
-    public async Task<IActionResult> GetAllCommentsInPost(int postId)
+    public async Task<CustomApiResponse> GetAllCommentsInPost(int postId)
     {
         var comments = await _commentsService.GetAllCommentsInPost(postId);
 
         if (comments.Count <= 0)
         {
-            return NotFound("No comments found for the post");
+            // return NotFound("No comments found for the post");
+            return new CustomApiResponse(message: "No comments found for the post", statusCode: 404);
         }
 
-        return Ok(comments);
+        // return Ok(comments);
+        return new CustomApiResponse(comments);
     }
 }

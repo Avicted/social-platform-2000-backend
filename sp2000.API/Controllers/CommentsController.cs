@@ -1,3 +1,4 @@
+using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
@@ -18,56 +19,64 @@ public class CommentsController : ControllerBase
 
     // POST: api/Comments
     [HttpPost]
-    public async Task<IActionResult> CreateComment(CreateCommentDto comment)
+    public async Task<CustomApiResponse> CreateComment(CreateCommentDto comment)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            // return BadRequest(ModelState);
+            throw new ApiProblemDetailsException(ModelState);
         }
 
         var createdComment = await _commentsService.CreateComment(comment);
 
-        return CreatedAtAction(nameof(CreateComment), comment);
+        // return CreatedAtAction(nameof(CreateComment), comment);
+        return new CustomApiResponse(comment, statusCode: 201);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCommentByID(int id)
+    public async Task<CustomApiResponse> GetCommentByID(int id)
     {
         var comment = await _commentsService.GetCommentByID(id);
 
         if (comment == null)
         {
-            return NotFound("Comment not found");
+            // return NotFound("Comment not found");
+            return new CustomApiResponse(message: "Comment not found", statusCode: 404);
         }
 
-        return Ok(comment);
+        // return Ok(comment);
+        return new CustomApiResponse(comment);
     }
 
     // PUT: api/Comments/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateComment(int id, UpdateCommentDto comment)
+    public async Task<CustomApiResponse> UpdateComment(int id, UpdateCommentDto comment)
     {
         var updatedComment = await _commentsService.UpdateComment(id, comment);
 
         if (updatedComment == null)
         {
-            return NotFound("Comment not found");
+            // return NotFound("Comment not found");
+            return new CustomApiResponse(message: "Comment not found", statusCode: 404);
         }
 
-        return Ok(updatedComment);
+        // return Ok(updatedComment);
+        return new CustomApiResponse(updatedComment);
     }
 
     // DELETE: api/Comments/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteComment(int id)
+    public async Task<CustomApiResponse> DeleteComment(int id)
     {
         bool isDeleted = await _commentsService.DeleteComment(id);
 
         if (!isDeleted)
         {
-            return NotFound("Comment not found");
+            // return NotFound("Comment not found");
+            return new CustomApiResponse(message: "Comment not found", statusCode: 404);
         }
 
-        return NoContent();
+        // return NoContent();
+        return new CustomApiResponse(statusCode: 204);
     }
 }
