@@ -8,10 +8,10 @@ public class CustomApiResponse
     public Pagination Pagination { get; set; }
 
     public CustomApiResponse(
-        object payload = null,
+        object payload = null!,
         string message = "",
         int statusCode = 200,
-        Pagination pagination = null)
+        Pagination pagination = null!)
     {
         this.Code = statusCode;
         this.Message = message == string.Empty ? "Success" : message;
@@ -21,18 +21,20 @@ public class CustomApiResponse
 
     public CustomApiResponse(
         object? payload = null,
-        Pagination pagination = null)
+        Pagination pagination = null!)
     {
         this.Code = 200;
         this.Message = "Success";
-        this.Payload = payload;
+        this.Payload = payload!;
         this.Pagination = pagination;
     }
 
     public CustomApiResponse(object payload)
     {
         this.Code = 200;
-        this.Payload = payload;
+        this.Message = string.Empty;
+        this.Payload = payload!;
+        this.Pagination = null!;
     }
 }
 
