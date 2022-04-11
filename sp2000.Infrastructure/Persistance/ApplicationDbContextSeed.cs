@@ -1,4 +1,4 @@
-using sp2000.Models;
+using sp2000.Application.Models;
 
 namespace Infrastructure;
 
@@ -35,23 +35,39 @@ public static class ApplicationDbContextSeed
             });
             context.Categories.Add(new Category
             {
-                Title = "This is the sixth category title",
+                Title = "This is the 6th category title",
             });
             context.Categories.Add(new Category
             {
-                Title = "This is the seventh category title",
+                Title = "This is the 7th category title",
             });
             context.Categories.Add(new Category
             {
-                Title = "This is the eighth category title",
+                Title = "This is the 8th category title",
             });
             context.Categories.Add(new Category
             {
-                Title = "This is the nineth category title",
+                Title = "This is the 9th category title",
             });
             context.Categories.Add(new Category
             {
-                Title = "This is the tenth category title",
+                Title = "This is the 10th category title",
+            });
+            context.Categories.Add(new Category
+            {
+                Title = "This is the 11th category title",
+            });
+            context.Categories.Add(new Category
+            {
+                Title = "This is the 12th category title",
+            });
+            context.Categories.Add(new Category
+            {
+                Title = "This is the 13th category title",
+            });
+            context.Categories.Add(new Category
+            {
+                Title = "This is the 14th category title",
             });
 
             await context.SaveChangesAsync();
@@ -81,6 +97,13 @@ public static class ApplicationDbContextSeed
                 Title = "This is the test title",
                 Content = "The content here is quite short",
             });
+
+
+            context.Comments.Add(new Comment
+            {
+
+            });
+
 
             await context.SaveChangesAsync();
         }

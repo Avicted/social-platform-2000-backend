@@ -1,6 +1,4 @@
-﻿using sp2000.Models;
-
-namespace sp2000.Application.Models;
+﻿namespace sp2000.Application.Models;
 
 public class Comment : BaseEntity
 {

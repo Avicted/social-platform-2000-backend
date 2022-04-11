@@ -1,7 +1,7 @@
 
 
 using Microsoft.EntityFrameworkCore;
-using sp2000.Models;
+using sp2000.Application.Models;
 using sp2000.Application.DTO;
 
 namespace Infrastructure;

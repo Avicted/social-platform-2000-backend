@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using sp2000.Models;
+using sp2000.Application.Models;
 
 namespace Infrastructure;
 

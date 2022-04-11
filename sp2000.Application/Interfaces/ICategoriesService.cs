@@ -1,4 +1,4 @@
-using sp2000.Models;
+using sp2000.Application.Models;
 using sp2000.Application.DTO;
 
 namespace sp2000.Services;

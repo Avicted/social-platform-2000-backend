@@ -1,5 +1,5 @@
 using sp2000.Interfaces;
-using sp2000.Models;
+using sp2000.Application.Models;
 
 namespace Infrastructure;
 

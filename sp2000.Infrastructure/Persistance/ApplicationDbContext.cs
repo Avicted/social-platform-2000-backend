@@ -1,7 +1,7 @@
 using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
+using sp2000.Application.Models;
 using sp2000.Infrastructure.Persistance.Configurations;
-using sp2000.Models;
 
 namespace Infrastructure;
 
@@ -23,6 +23,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Post> Posts { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
+    public DbSet<Comment> Comments { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

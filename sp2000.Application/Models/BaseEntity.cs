@@ -1,4 +1,4 @@
-namespace sp2000.Models;
+namespace sp2000.Application.Models;
 
 // @Note(Avic): Used for adding common fields to models / entities
 public class BaseEntity
