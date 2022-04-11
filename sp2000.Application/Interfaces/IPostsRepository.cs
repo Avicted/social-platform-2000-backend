@@ -9,5 +9,5 @@ public interface IPostsRepository : IRepositoryBase<Post>
     Task<Post?> GetPostByIdAsync(int id);
     void CreatePost(Post post);
     void UpdatePost(Post post);
-    void DeleteCategory(Post post);
+    void DeletePost(Post post);
 }

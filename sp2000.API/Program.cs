@@ -2,9 +2,9 @@ using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure;
 using sp2000.Services;
-using sp2000.Interfaces;
 using Microsoft.OpenApi.Models;
 using sp2000.Infrastructure;
+using sp2000.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IPostsService, PostService>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

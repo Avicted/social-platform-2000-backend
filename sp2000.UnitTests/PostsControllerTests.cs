@@ -10,6 +10,7 @@ using sp2000.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
+using sp2000.Application.Interfaces;
 
 namespace sp2000.UnitTests;
 
@@ -54,10 +55,11 @@ public class PostsControllerTests
         };
 
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         A.CallTo(() => postsService.GetPostByID(1)).Returns(Task.FromResult(fakePost));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.GetPostByID(1);
@@ -75,10 +77,11 @@ public class PostsControllerTests
     {
         // Arrange
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         A.CallTo(() => postsService.GetPostByID(1)).Returns(Task.FromResult<PostDto?>(null));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.GetPostByID(1);
@@ -100,6 +103,7 @@ public class PostsControllerTests
 
         var categoriesService = A.Fake<ICategoriesService>();
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         var fakePost = GetFakePosts().First();
         fakePost.CategoryId = updatePost.CategoryId;
@@ -108,7 +112,7 @@ public class PostsControllerTests
 
         A.CallTo(() => postsService.UpdatePost(1, updatePost)).Returns(Task.FromResult(fakePost));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.PutPost(1, updatePost);
@@ -137,11 +141,12 @@ public class PostsControllerTests
 
         var categoriesService = A.Fake<ICategoriesService>();
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
 
         A.CallTo(() => postsService.UpdatePost(2000, updatePost)).Returns(Task.FromResult<PostDto?>(null));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.PutPost(2000, updatePost);
@@ -155,6 +160,7 @@ public class PostsControllerTests
     {
         // Arrange
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         var newPost = new CreatePostDto()
         {
@@ -170,7 +176,7 @@ public class PostsControllerTests
 
         A.CallTo(() => postsService.CreatePost(newPost)).Returns(Task.FromResult(fakeCreatedPost));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.CreatePost(newPost);
@@ -191,6 +197,7 @@ public class PostsControllerTests
     {
         // Arrange
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         var newPost = new CreatePostDto()
         {
@@ -204,7 +211,7 @@ public class PostsControllerTests
 
         A.CallTo(() => postsService.CreatePost(newPost)).Returns(Task.FromResult(fakeCreatedPost));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.CreatePost(newPost);
@@ -219,10 +226,11 @@ public class PostsControllerTests
     {
         // Arrange
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         A.CallTo(() => postsService.DeletePost(It.IsAny<int>())).Returns(Task.FromResult(true));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.DeletePost(1);
@@ -237,10 +245,11 @@ public class PostsControllerTests
     {
         // Arrange
         var postsService = A.Fake<IPostsService>();
+        var commentsService = A.Fake<ICommentsService>();
 
         A.CallTo(() => postsService.DeletePost(It.IsAny<int>())).Returns(Task.FromResult(false));
 
-        var controller = new PostsController(postsService);
+        var controller = new PostsController(postsService, commentsService);
 
         // Act
         var actionResult = await controller.DeletePost(1);

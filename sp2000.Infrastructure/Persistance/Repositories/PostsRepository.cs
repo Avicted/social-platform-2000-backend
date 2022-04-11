@@ -14,7 +14,7 @@ public class PostsRepository : RepositoryBase<Post>, IPostsRepository
         Create(post);
     }
 
-    public void DeleteCategory(Post post)
+    public void DeletePost(Post post)
     {
         Delete(post);
     }

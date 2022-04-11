@@ -4,9 +4,9 @@ using sp2000.Application.DTO;
 
 namespace sp2000.Mappings;
 
-public class CategoryMapping : Profile
+public class CategoriesMapping : Profile
 {
-    public CategoryMapping()
+    public CategoriesMapping()
     {
         CreateMap<Category, CreateCategoryDto>();
         CreateMap<Category, CategoryDto>();

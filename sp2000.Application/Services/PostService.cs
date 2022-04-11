@@ -22,7 +22,7 @@ public class PostService : IPostsService
     {
         var entity = _mapper.Map<Post>(post);
 
-        _repository.Post.Create(entity);
+        _repository.Post.CreatePost(entity);
 
         await _repository.SaveAsync();
 
@@ -74,7 +74,7 @@ public class PostService : IPostsService
             entity.Title = post.Title;
             entity.Content = post.Content;
 
-            _repository.Post.Update(entity);
+            _repository.Post.UpdatePost(entity);
 
             // Save changes to the database
             await _repository.SaveAsync();
@@ -95,7 +95,7 @@ public class PostService : IPostsService
         // Validate entity is not null
         if (entity != null)
         {
-            _repository.Post.Delete(entity);
+            _repository.Post.DeletePost(entity);
 
             // Save changes to the database
             await _repository.SaveAsync();

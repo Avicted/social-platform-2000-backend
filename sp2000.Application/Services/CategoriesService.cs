@@ -93,10 +93,6 @@ public class CategoriesService : ICategoriesService
             // Save changes to the database
             await _repository.SaveAsync();
         }
-        else
-        {
-            return false;
-        }
 
         return true;
     }
