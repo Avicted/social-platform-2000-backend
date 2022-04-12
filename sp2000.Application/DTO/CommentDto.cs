@@ -9,4 +9,5 @@ public class CommentDto : BaseEntity
     public string Content { get; set; } = null!;
     public int PostId { get; set; }
     public int? ParentCommentId { get; set; }
+    public int ParentsCount { get; set; } = 0;
 }

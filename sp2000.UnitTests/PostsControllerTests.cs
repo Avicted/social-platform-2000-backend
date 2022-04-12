@@ -68,7 +68,7 @@ public class PostsControllerTests
         var okResult = (CustomApiResponse)actionResult;
         Assert.NotNull(okResult);
 
-        var result = okResult.Payload as PostDto;
+        var result = okResult.Result as PostDto;
         Assert.Equal(fakePost, result);
     }
 
@@ -121,7 +121,7 @@ public class PostsControllerTests
         Assert.NotNull(actionResult);
 
         var okResult = (CustomApiResponse)actionResult;
-        var result = okResult.Payload as PostDto;
+        var result = okResult.Result as PostDto;
 
         var obj1Str = JsonConvert.SerializeObject(fakePost);
         var obj2Str = JsonConvert.SerializeObject(result);
@@ -185,7 +185,7 @@ public class PostsControllerTests
         Assert.NotNull(actionResult);
 
         var okResult = actionResult as CustomApiResponse;
-        var result = okResult?.Payload as PostDto;
+        var result = okResult?.Result as PostDto;
 
         var obj1Str = JsonConvert.SerializeObject(fakeCreatedPost);
         var obj2Str = JsonConvert.SerializeObject(result);
