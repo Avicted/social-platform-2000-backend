@@ -123,7 +123,7 @@ public static class ApplicationDbContextSeed
                 AuthorName = "Alice",
                 Content = "Hello Team!",
                 PostId = 1,
-                ParentCommentId = 101,
+                ParentCommentId = 100,
             });
             context.Comments.Add(new Comment
             {
@@ -131,7 +131,7 @@ public static class ApplicationDbContextSeed
                 AuthorName = "BobAlice1337",
                 Content = "I dont think så",
                 PostId = 1,
-                ParentCommentId = 100,
+                ParentCommentId = 102,
             });
             context.Comments.Add(new Comment
             {
@@ -139,7 +139,7 @@ public static class ApplicationDbContextSeed
                 AuthorName = "helloteam",
                 Content = "This is a new comment",
                 PostId = 1,
-                ParentCommentId = 102,
+                ParentCommentId = 103,
             });
             context.Comments.Add(new Comment
             {
