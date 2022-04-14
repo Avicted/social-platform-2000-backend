@@ -64,9 +64,9 @@ public class CategoriesController : ControllerBase
 
     // GET: api/Category/posts
     [HttpGet("{id}/posts")]
-    public async Task<CustomApiResponse> GetPostsInCategory(int id, int? pageNumber)
+    public async Task<CustomApiResponse> GetPostsInCategory([FromQuery] PostParameters postParameters, int id)
     {
-        var posts = await _postsService.GetPostsInCategory(id, pageNumber);
+        var posts = await _postsService.GetPostsInCategory(postParameters, id);
 
         if (posts == null || posts.Count <= 0)
         {
@@ -74,7 +74,13 @@ public class CategoriesController : ControllerBase
             return new CustomApiResponse(message: "No posts found in category", statusCode: 404);
         }
 
-        return new CustomApiResponse(posts);
+        return new CustomApiResponse(posts, new Pagination
+        {
+            CurrentPage = posts.CurrentPage,
+            PageSize = posts.PageSize,
+            TotalItemsCount = posts.TotalItemsCount,
+            TotalPages = posts.TotalPages,
+        });
     }
 
     // PUT: api/Category/5

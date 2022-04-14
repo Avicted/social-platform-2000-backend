@@ -2,6 +2,7 @@ using sp2000.Application.Models;
 using AutoMapper;
 using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
+using sp2000.Application.Helpers;
 
 namespace sp2000.Application.Services;
 
@@ -29,22 +30,16 @@ public class PostService : IPostsService
     }
 
 
-    public async Task<List<PostDto>> GetPostsInCategory(int categoryId, int? pageNumber)
+    public async Task<PagedList<PostDto>> GetPostsInCategory(PostParameters postParameters, int categoryId)
     {
-        var posts = await _repository.Post.GetAllPostsInCategoryAsync(categoryId);
+        var posts = await _repository.Post.GetAllPostsInCategoryAsync(postParameters, categoryId);
 
         if (posts == null)
         {
-            return new List<PostDto>();
+            return new PagedList<PostDto>(new List<PostDto>(), 0, 0, 0);
         }
 
-        // var items = await posts.Skip(((pageNumber ?? 1) - 1) * pageSize).Take(pageSize).ToListAsync();
-        // const int pageSize = 10;
-        // var items = await PaginatedList<Post>.CreateAsync(posts, pageNumber ?? 1, pageSize);
-
-        var result = _mapper.Map<List<PostDto>>(posts);
-
-        return result;
+        return posts;
     }
 
     public async Task<PostDto?> GetPostByID(int id)

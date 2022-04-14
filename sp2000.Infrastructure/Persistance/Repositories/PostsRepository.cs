@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using sp2000.Application.DTO;
+using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
 
@@ -20,11 +22,21 @@ public class PostsRepository : RepositoryBase<Post>, IPostsRepository
         Delete(post);
     }
 
-    public async Task<IEnumerable<Post>> GetAllPostsInCategoryAsync(int categoryId)
+    public async Task<PagedList<PostDto>> GetAllPostsInCategoryAsync(PostParameters postParameters, int categoryId)
     {
-        return await FindByCondition(p => p.CategoryId == categoryId)
+        var source = FindByCondition(p => p.CategoryId == categoryId)
             .OrderByDescending(p => p.CreatedDate)
-            .ToListAsync();
+            .Select(p => new PostDto
+            {
+                CategoryId = p.CategoryId,
+                PostId = p.PostId,
+                Title = p.Title,
+                Content = p.Content,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate,
+            });
+
+        return await PagedList<PostDto>.ToPagedListAsync(source, postParameters.PageNumber, postParameters.PageSize);
     }
 
     public async Task<Post?> GetPostByIdAsync(int id)

@@ -27,17 +27,6 @@ public class CommentsRepository : RepositoryBase<Comment>, ICommentsRepository
             .ToListAsync();
 
         return comments;
-
-        // For each comment get the count of all parent comments
-        /* foreach (var comment in comments)
-        {
-            while (true)
-            {
-                var parentComment = await FindByCondition(c => c.)
-            }
-
-            return comments;
-        } */
     }
 
     public async Task<Comment?> GetCommentByIdAsync(int id)
