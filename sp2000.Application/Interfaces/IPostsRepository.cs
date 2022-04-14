@@ -1,7 +1,6 @@
-using sp2000.Interfaces;
 using sp2000.Application.Models;
 
-namespace Infrastructure;
+namespace sp2000.Application.Interfaces;
 
 public interface IPostsRepository : IRepositoryBase<Post>
 {

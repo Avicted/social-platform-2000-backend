@@ -1,7 +1,9 @@
 using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using sp2000.Application.DTO;
-using sp2000.Services;
+using sp2000.Application.Models;
+using sp2000.Application.Helpers;
+using sp2000.Application.Interfaces;
 
 namespace sp2000.Controllers;
 
@@ -24,9 +26,9 @@ public class CategoriesController : ControllerBase
 
     // GET: api/Category
     [HttpGet]
-    public async Task<CustomApiResponse> GetCategories(int? pageNumber)
+    public async Task<CustomApiResponse> GetCategories([FromQuery] CategoryParameters categoryParameters)
     {
-        var categories = await _categoryService.GetCategories(pageNumber);
+        var categories = await _categoryService.GetCategories(categoryParameters);
 
         if (categories.Count <= 0)
         {
@@ -35,7 +37,13 @@ public class CategoriesController : ControllerBase
         }
 
         // return Ok(categories);
-        return new CustomApiResponse(categories);
+        return new CustomApiResponse(categories, new Pagination
+        {
+            CurrentPage = categories.CurrentPage,
+            PageSize = categories.PageSize,
+            TotalItemsCount = categories.TotalItemsCount,
+            TotalPages = categories.TotalPages,
+        });
     }
 
     // GET: api/Category/5

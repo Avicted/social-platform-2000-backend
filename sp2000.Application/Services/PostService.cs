@@ -1,10 +1,9 @@
 using sp2000.Application.Models;
 using AutoMapper;
 using sp2000.Application.DTO;
-using sp2000.Interfaces;
-using Microsoft.Extensions.Configuration;
+using sp2000.Application.Interfaces;
 
-namespace sp2000.Services;
+namespace sp2000.Application.Services;
 
 public class PostService : IPostsService
 {

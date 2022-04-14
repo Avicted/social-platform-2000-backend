@@ -1,6 +1,6 @@
 using sp2000.Application.DTO;
 
-namespace sp2000.Services;
+namespace sp2000.Application.Interfaces;
 
 public interface IPostsService
 {

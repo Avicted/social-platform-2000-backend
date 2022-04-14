@@ -1,7 +1,7 @@
 using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure;
-using sp2000.Services;
+using sp2000.Application.Services;
 using Microsoft.OpenApi.Models;
 using sp2000.Infrastructure;
 using sp2000.Application.Interfaces;

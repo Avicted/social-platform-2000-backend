@@ -1,4 +1,4 @@
-namespace sp2000.Application.DTO;
+namespace sp2000.Application.Helpers;
 
 public class CustomApiResponse
 {

@@ -2,7 +2,7 @@
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
 
-namespace Infrastructure;
+namespace Infrastructure.Persistance.Repositories;
 
 public class CommentsRepository : RepositoryBase<Comment>, ICommentsRepository
 {

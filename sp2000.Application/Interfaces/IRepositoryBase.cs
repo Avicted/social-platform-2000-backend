@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace sp2000.Interfaces;
+namespace sp2000.Application.Interfaces;
 public interface IRepositoryBase<T>
 {
     IQueryable<T> FindAll();

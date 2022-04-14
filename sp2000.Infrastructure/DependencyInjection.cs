@@ -1,8 +1,8 @@
 ﻿using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Persistance.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using sp2000.Interfaces;
+using sp2000.Application.Interfaces;
 
 namespace sp2000.Infrastructure;
 public static class DependencyInjection

@@ -1,5 +1,4 @@
 ﻿using sp2000.Application.Models;
-using sp2000.Interfaces;
 
 namespace sp2000.Application.Interfaces;
 public interface ICommentsRepository : IRepositoryBase<Comment>

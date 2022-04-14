@@ -1,7 +1,4 @@
-using Infrastructure;
-using sp2000.Application.Interfaces;
-
-namespace sp2000.Interfaces;
+namespace sp2000.Application.Interfaces;
 
 // @Note(Avic): Here we wrap all the existing database repositories
 // So that we can Depedency Inject the IRepositoryWrapper into all services.

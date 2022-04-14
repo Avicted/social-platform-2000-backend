@@ -1,9 +1,10 @@
 using AutoMapper;
 using sp2000.Application.Models;
 using sp2000.Application.DTO;
-using sp2000.Interfaces;
+using sp2000.Application.Interfaces;
+using sp2000.Application.Helpers;
 
-namespace sp2000.Services;
+namespace sp2000.Application.Services;
 
 public class CategoriesService : ICategoriesService
 {
@@ -28,19 +29,19 @@ public class CategoriesService : ICategoriesService
         return _mapper.Map<CategoryDto>(entity);
     }
 
-    public async Task<List<CategoryDto>> GetCategories(int? pageNumber)
+    public async Task<PagedList<CategoryDto>> GetCategories(CategoryParameters categoryParameters)
     {
-        var categories = await _repository.Category.GetAllCategoriesAsync();
+        PagedList<CategoryDto> categories = await _repository.Category.GetAllCategoriesAsync(categoryParameters);
 
         if (categories == null)
         {
-            return new List<CategoryDto>();
+            return new PagedList<CategoryDto>(new List<CategoryDto>(), 0, 0, 0);
         }
         // const int pageSize = 10;
         // var temp = await PaginatedList<Category>.CreateAsync((IQueryable<Category>)categories, pageNumber ?? 1, pageSize);
-        var result = _mapper.Map<List<CategoryDto>>(categories);
+        // var result = _mapper.Map<List<CategoryDto>>(categories);
 
-        return result;
+        return categories;
     }
 
     public async Task<CategoryDto?> GetCategoryByID(int id)

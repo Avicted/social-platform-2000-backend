@@ -2,9 +2,8 @@ using AutoMapper;
 using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
-using sp2000.Interfaces;
 
-namespace sp2000.Services;
+namespace sp2000.Application.Services;
 
 public class CommentsService : ICommentsService
 {

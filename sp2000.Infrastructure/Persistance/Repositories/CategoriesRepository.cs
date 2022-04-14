@@ -1,10 +1,10 @@
-
-
 using Microsoft.EntityFrameworkCore;
 using sp2000.Application.Models;
 using sp2000.Application.DTO;
+using sp2000.Application.Interfaces;
+using sp2000.Application.Helpers;
 
-namespace Infrastructure;
+namespace Infrastructure.Persistance.Repositories;
 
 public class CategoriesRepository : RepositoryBase<Category>, ICategoriesRepository
 {
@@ -12,9 +12,9 @@ public class CategoriesRepository : RepositoryBase<Category>, ICategoriesReposit
     {
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
+    public async Task<PagedList<CategoryDto>> GetAllCategoriesAsync(CategoryParameters categoryParameters)
     {
-        return await FindAll()
+        var source = FindAll()
             .Include(c => c.Posts)
             .OrderByDescending(c => c.CreatedDate)
             .Select(c => new CategoryDto
@@ -24,8 +24,9 @@ public class CategoriesRepository : RepositoryBase<Category>, ICategoriesReposit
                 PostsCount = c.Posts.Count,
                 CreatedDate = c.CreatedDate,
                 UpdatedDate = c.UpdatedDate
-            })
-            .ToListAsync();
+            });
+
+        return await PagedList<CategoryDto>.ToPagedListAsync(source, categoryParameters.PageNumber, categoryParameters.PageSize);
     }
     public void CreateCategory(Category category)
     {

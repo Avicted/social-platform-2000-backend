@@ -1,12 +1,12 @@
-using sp2000.Interfaces;
 using sp2000.Application.Models;
 using sp2000.Application.DTO;
+using sp2000.Application.Helpers;
 
-namespace Infrastructure;
+namespace sp2000.Application.Interfaces;
 
 public interface ICategoriesRepository : IRepositoryBase<Category>
 {
-    Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
+    Task<PagedList<CategoryDto>> GetAllCategoriesAsync(CategoryParameters categoryParameters);
     Task<Category?> GetCategoryByIdAsync(int id);
     void CreateCategory(Category category);
     void UpdateCategory(Category category);
