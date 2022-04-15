@@ -12,14 +12,16 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
 using sp2000.Application.Interfaces;
+using sp2000.Application.Models;
+using AutoWrapper.Wrappers;
 
 namespace sp2000.UnitTests;
 
 public class CategoriesControllerTests
 {
-    private static List<PostDto> GetFakePosts()
+    private static PagedList<PostDto> GetFakePosts()
     {
-        return new List<PostDto> {
+        return new PagedList<PostDto> {
             new PostDto()
             {
                 PostId = 1,
@@ -41,9 +43,9 @@ public class CategoriesControllerTests
         };
     }
 
-    private static List<CategoryDto> GetFakeCategories()
+    private static PagedList<CategoryDto> GetFakeCategories()
     {
-        return new List<CategoryDto> {
+        return new PagedList<CategoryDto> {
             new CategoryDto() {
                 CategoryId = 1,
                 CreatedDate = DateTime.Today,
@@ -158,7 +160,8 @@ public class CategoriesControllerTests
         var actionResult = await controller.GetCategoryByID(2000);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.IsType<CustomApiResponse>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
     }
 
     [Fact]
@@ -167,18 +170,27 @@ public class CategoriesControllerTests
         // Arrage
         var categoriesService = A.Fake<ICategoriesService>();
         var postsService = A.Fake<IPostsService>();
-        A.CallTo(() => postsService.GetPostsInCategory(1, null)).Returns(Task.FromResult(GetFakePosts()));
+
+        PostParameters postParameters = new PostParameters
+        {
+            PageNumber = 1,
+            PageSize = 10,
+        };
+
+        A.CallTo(() => postsService.GetPostsInCategory(It.IsAny<PostParameters>(), It.IsAny<int>())).Returns(
+            Task.FromResult(GetFakePosts())
+        );
 
         var controller = new CategoriesController(categoriesService, postsService);
 
         // Act
-        var actionResult = await controller.GetPostsInCategory(1, null);
+        var actionResult = await controller.GetPostsInCategory(postParameters, 1);
 
         // Assert
         Assert.NotNull(actionResult);
 
         var okResult = (CustomApiResponse)actionResult;
-        var result = okResult.Result as List<PostDto>;
+        var result = okResult.Result as PagedList<PostDto>;
 
         PostDto? fakePost = GetFakePosts().Find(p => p.PostId == 1);
 
@@ -196,15 +208,24 @@ public class CategoriesControllerTests
         var postsService = A.Fake<IPostsService>();
         var fakeCategories = new List<PostDto>();
 
-        A.CallTo(() => postsService.GetPostsInCategory(2000, null)).Returns(Task.FromResult<List<PostDto>>(null));
+        PostParameters postParameters = new PostParameters
+        {
+            PageNumber = 1,
+            PageSize = 10,
+        };
+
+        A.CallTo(() => postsService.GetPostsInCategory(It.IsAny<PostParameters>(), 2000)).Returns(
+            Task.FromResult<PagedList<PostDto>>(new PagedList<PostDto>(new List<PostDto>(), 0, 0, 0))
+        );
 
         var controller = new CategoriesController(categoriesService, postsService);
 
         // Act
-        var actionResult = await controller.GetPostsInCategory(2000, null);
+        var actionResult = await controller.GetPostsInCategory(postParameters, 2000);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -260,7 +281,8 @@ public class CategoriesControllerTests
         var actionResult = await controller.PutCategory(2000, updateCategory);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -318,11 +340,11 @@ public class CategoriesControllerTests
         var controller = new CategoriesController(categoriesService, postsService);
 
         // Act
-        var actionResult = await controller.CreateCategory(newCategory);
+        var actionResult = await Assert.ThrowsAsync<ApiProblemDetailsException>(async () => await controller.CreateCategory(newCategory));
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        Assert.IsType<ApiProblemDetailsException>(actionResult);
     }
 
     [Fact]
@@ -341,7 +363,7 @@ public class CategoriesControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -360,6 +382,6 @@ public class CategoriesControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 }

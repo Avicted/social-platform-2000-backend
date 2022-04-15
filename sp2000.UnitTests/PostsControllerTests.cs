@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
 using sp2000.Application.Interfaces;
+using AutoWrapper.Wrappers;
 
 namespace sp2000.UnitTests;
 
@@ -87,7 +88,8 @@ public class PostsControllerTests
         var actionResult = await controller.GetPostByID(1);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -152,7 +154,8 @@ public class PostsControllerTests
         var actionResult = await controller.PutPost(2000, updatePost);
 
         // Assert
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -209,16 +212,16 @@ public class PostsControllerTests
 
         var fakeCreatedPost = GetFakePosts().First();
 
-        A.CallTo(() => postsService.CreatePost(newPost)).Returns(Task.FromResult(fakeCreatedPost));
+        A.CallTo(() => postsService.CreatePost(It.IsAny<CreatePostDto>())).Returns(Task.FromResult(fakeCreatedPost));
 
         var controller = new PostsController(postsService, commentsService);
 
         // Act
-        var actionResult = await controller.CreatePost(newPost);
+        var actionResult = await Assert.ThrowsAsync<ApiProblemDetailsException>(async () => await controller.CreatePost(newPost));
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<BadRequestObjectResult>(actionResult);
+        Assert.IsType<ApiProblemDetailsException>(actionResult);
     }
 
     [Fact]
@@ -237,7 +240,8 @@ public class PostsControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(204, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 
     [Fact]
@@ -256,6 +260,7 @@ public class PostsControllerTests
 
         // Assert
         Assert.NotNull(actionResult);
-        Assert.IsType<NotFoundObjectResult>(actionResult);
+        Assert.Equal<int>(404, actionResult.Code);
+        Assert.IsType<CustomApiResponse>(actionResult);
     }
 }
