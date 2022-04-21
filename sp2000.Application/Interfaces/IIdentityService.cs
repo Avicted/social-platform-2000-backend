@@ -1,3 +1,4 @@
+using sp2000.Application.Helpers;
 using sp2000.Application.Models;
 
 namespace sp2000.Application.Interfaces;
@@ -9,5 +10,5 @@ public interface IIdentityService
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
-    Task<ApplicationUser> CreateUserAsync(string userName, string password);
+    Task<CustomApiResponse> CreateUserAsync(string userName, string password);
 }

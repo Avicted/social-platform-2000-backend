@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
 
@@ -35,7 +36,7 @@ public class IdentityService : IIdentityService
         return username;
     }
 
-    public async Task<ApplicationUser> CreateUserAsync(string userName, string password)
+    public async Task<CustomApiResponse> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
         {
@@ -43,9 +44,9 @@ public class IdentityService : IIdentityService
             Email = userName,
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        IdentityResult result = await _userManager.CreateAsync(user, password);
 
-        return user;
+        return result.ToApplicationResult();
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)

@@ -5,7 +5,7 @@ using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 using AutoWrapper.Wrappers;
 
-namespace sp2000.Controllers;
+namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
