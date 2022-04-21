@@ -1,15 +1,27 @@
-using Infrastructure.Configuration;
+using System.Reflection;
+using Duende.IdentityServer.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
-using sp2000.Infrastructure.Persistance.Configurations;
 
-namespace Infrastructure;
+namespace sp2000.Infrastructure;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IDateTime _dateTime;
+
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options,
+        IOptions<OperationalStoreOptions> operationalStoreOptions,
+        ICurrentUserService currentUserService,
+        IDateTime dateTime)
+        : base(options, operationalStoreOptions)
     {
+        _currentUserService = currentUserService;
+        _dateTime = dateTime;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -20,37 +32,53 @@ public class ApplicationDbContext : DbContext
         }
     }
 
+    // These are our tables
+    public DbSet<ApplicationUser> applicationUsers => Set<ApplicationUser>();
+    public DbSet<Post> Posts => Set<Post>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Comment> Comments => Set<Comment>();
 
-    public DbSet<Post> Posts { get; set; } = null!;
-    public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<Comment> Comments { get; set; } = null!;
 
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    // Apply the model configurations from the Configurations directory
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PostEntityTypeConfiguration).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CategoryEntityTypeConfiguration).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CommentEntityTypeConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        base.OnModelCreating(builder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        var entries = ChangeTracker
-            .Entries()
-            .Where(e => e.Entity is BaseEntity && (
-                    e.State == EntityState.Added
-                    || e.State == EntityState.Modified));
-
-        foreach (var entityEntry in entries)
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
-            ((BaseEntity)entityEntry.Entity).UpdatedDate = DateTime.UtcNow;
+            // Update the fields for the BaseEntity
+            ((BaseEntity)entry.Entity).UpdatedDate = DateTime.UtcNow;
 
-            if (entityEntry.State == EntityState.Added)
+            if (entry.State == EntityState.Added)
             {
-                ((BaseEntity)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
+                ((BaseEntity)entry.Entity).CreatedDate = DateTime.UtcNow;
+            }
+
+            // Update the fields for the AuditableEntity
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.CreatedDate = _dateTime.Now;
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    entry.Entity.UpdatedDate = _dateTime.Now;
+                    break;
             }
         }
 
-        return await base.SaveChangesAsync();
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
     }
+
+
+    public Task<int> SaveChangesAsync() => base.SaveChangesAsync();
 }

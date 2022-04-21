@@ -1,6 +1,6 @@
 using sp2000.Application.Models;
 
-namespace Infrastructure;
+namespace sp2000.Infrastructure;
 
 public static class ApplicationDbContextSeed
 {

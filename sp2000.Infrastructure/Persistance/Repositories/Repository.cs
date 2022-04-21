@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using sp2000.Application.Interfaces;
 
-namespace Infrastructure.Persistance.Repositories;
+namespace sp2000.Infrastructure.Persistance.Repositories;
 
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {

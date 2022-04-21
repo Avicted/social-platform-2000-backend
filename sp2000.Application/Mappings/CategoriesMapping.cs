@@ -2,7 +2,7 @@ using AutoMapper;
 using sp2000.Application.Models;
 using sp2000.Application.DTO;
 
-namespace sp2000.Mappings;
+namespace sp2000.Application.Mappings;
 
 public class CategoriesMapping : Profile
 {

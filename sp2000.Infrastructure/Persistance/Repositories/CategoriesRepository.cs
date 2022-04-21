@@ -4,7 +4,7 @@ using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Helpers;
 
-namespace Infrastructure.Persistance.Repositories;
+namespace sp2000.Infrastructure.Persistance.Repositories;
 
 public class CategoriesRepository : RepositoryBase<Category>, ICategoriesRepository
 {
