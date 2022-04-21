@@ -4,7 +4,7 @@ using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Helpers;
 
-namespace sp2000.Controllers;
+namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
