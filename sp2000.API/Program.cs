@@ -1,10 +1,11 @@
 using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure;
 using sp2000.Application.Services;
 using Microsoft.OpenApi.Models;
 using sp2000.Infrastructure;
 using sp2000.Application.Interfaces;
+using sp2000.API.Services;
+using sp2000.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +26,18 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 // @Note(Avic): Scoped services live as long as one request
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IPostsService, PostService>();
 builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
+// builder.Services.AddControllersWithViews();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -77,25 +84,38 @@ using (var scope = app.Services.CreateScope())
 // @Note(Avic): Formats the REST API responses from the controllers so that
 // errors and 200 OK results can easily be distiguished in the React client
 // https://github.com/proudmonkey/AutoWrapper
-app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+/* app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
 {
     ShowApiVersion = true,
     ShowStatusCode = true,
     UseCustomSchema = true,
     UseApiProblemDetailsException = true
-});
+}); */
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(MyAllowSpecificOrigins);
 }
 
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllers();
+
+/* app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller}/{action=Index}/{id?}");
+    endpoints.MapRazorPages();
+}); */
 
 app.Run();

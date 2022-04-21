@@ -1,6 +1,6 @@
 using sp2000.Application.Interfaces;
 
-namespace Infrastructure.Persistance.Repositories;
+namespace sp2000.Infrastructure.Persistance.Repositories;
 
 public class RespositoryWrapper : IRepositoryWrapper
 {

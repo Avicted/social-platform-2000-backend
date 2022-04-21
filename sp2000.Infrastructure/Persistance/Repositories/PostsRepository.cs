@@ -4,7 +4,7 @@ using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
 
-namespace Infrastructure.Persistance.Repositories;
+namespace sp2000.Infrastructure.Persistance.Repositories;
 
 public class PostsRepository : RepositoryBase<Post>, IPostsRepository
 {
