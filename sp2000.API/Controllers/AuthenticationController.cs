@@ -26,4 +26,9 @@ public class AuthenticationController : ControllerBase
     }
 
     // Authenticate
+    /* [HttpPost("/login")]
+    public async Task<CustomApiResponse> Authenticate(AuthenticateUserDto authenticateUser)
+    {
+        // return await _identityService.AuthorizeAsync()
+    } */
 }

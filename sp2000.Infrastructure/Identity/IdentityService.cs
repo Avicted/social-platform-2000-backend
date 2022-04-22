@@ -78,4 +78,21 @@ public class IdentityService : IIdentityService
 
         return true;
     }
+
+    public async Task<bool> LoginAsync(string username, string password)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null) return false;
+
+        bool isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+
+        if (!isPasswordValid) return false;
+
+        // We have a valid user login!
+
+
+
+        return true;
+    }
 }
