@@ -11,4 +11,6 @@ public interface IIdentityService
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
     Task<CustomApiResponse> CreateUserAsync(string userName, string password);
+
+    Task<bool> LoginAsync(string username, string password);
 }
