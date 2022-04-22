@@ -22,7 +22,7 @@ dotnet-ef database update --project sp2000.API/sp2000.API.csproj
 
 # Architecture
 
-![Architecture](documentation/architecture_2.png "Architecture")
+![Architecture](documentation/architecture_3.png "Architecture")
 
 # Database Diagram
 
