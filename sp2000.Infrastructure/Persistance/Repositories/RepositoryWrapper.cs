@@ -8,6 +8,7 @@ public class RespositoryWrapper : IRepositoryWrapper
     private ICategoriesRepository _category;
     private IPostsRepository _post;
     private ICommentsRepository _comment;
+    private IApplicationUsersRepository _applicationUsers;
 
     public RespositoryWrapper(ApplicationDbContext context)
     {
@@ -15,6 +16,7 @@ public class RespositoryWrapper : IRepositoryWrapper
         _category = new CategoriesRepository(_context);
         _post = new PostsRepository(_context);
         _comment = new CommentsRepository(_context);
+        _applicationUsers = new ApplicationUsersRepository(_context);
     }
 
     public ICategoriesRepository Category
@@ -53,6 +55,19 @@ public class RespositoryWrapper : IRepositoryWrapper
             }
 
             return _comment;
+        }
+    }
+
+    public IApplicationUsersRepository ApplicationUser
+    {
+        get
+        {
+            if (_applicationUsers == null)
+            {
+                _applicationUsers = new ApplicationUsersRepository(_context);
+            }
+
+            return _applicationUsers;
         }
     }
 

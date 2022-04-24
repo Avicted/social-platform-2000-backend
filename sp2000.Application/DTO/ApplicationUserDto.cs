@@ -5,5 +5,6 @@ namespace sp2000.Application.DTO;
 
 public class ApplicationUserDto : BaseEntity
 {
-    public virtual string UserName { get; set; }
+    public Guid Id { get; set; }
+    public virtual string Username { get; set; } = null!;
 }

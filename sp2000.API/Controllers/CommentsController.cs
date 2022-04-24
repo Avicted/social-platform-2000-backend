@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using sp2000.Application.DTO;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[CustomAuthorizeAttribute]
 public class CommentsController : ControllerBase
 {
     private readonly ICommentsService _commentsService;
@@ -34,6 +36,7 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetCommentByID(int id)
     {
         var comment = await _commentsService.GetCommentByID(id);

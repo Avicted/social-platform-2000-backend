@@ -1,7 +1,5 @@
-using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using sp2000.Application.DTO;
-using sp2000.Application.Models;
 using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 
@@ -19,16 +17,30 @@ public class AuthenticationController : ControllerBase
     }
 
     // Register a new user
-    [HttpPost("/register")]
-    public async Task<CustomApiResponse> RegisterNewUser(RegisterNewUserDto data)
+    [HttpPost("register")]
+    public async Task<CustomApiResponse> RegisterNewUser(RegisterNewUserDto user)
     {
-        return await _identityService.CreateUserAsync(data.Username, data.Password);
+        var result = await _identityService.CreateUserAsync(user);
+
+        if (result == null)
+        {
+            return new CustomApiResponse(
+                message: "Error the user could not be created",
+                statusCode: 500
+            );
+        }
+
+        return new CustomApiResponse(
+            message: "User successfully created",
+            statusCode: 201,
+            result: result
+        );
     }
 
     // Authenticate
-    /* [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<CustomApiResponse> Authenticate(AuthenticateUserDto authenticateUser)
     {
-        // return await _identityService.AuthorizeAsync()
-    } */
+        return await _identityService.LoginAsync(authenticateUser, HttpContext);
+    }
 }

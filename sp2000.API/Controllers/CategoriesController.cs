@@ -4,11 +4,13 @@ using sp2000.Application.DTO;
 using sp2000.Application.Models;
 using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoriesService _categoryService;
@@ -26,6 +28,7 @@ public class CategoriesController : ControllerBase
 
     // GET: api/Category
     [HttpGet]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetCategories([FromQuery] CategoryParameters categoryParameters)
     {
         var categories = await _categoryService.GetCategories(categoryParameters);
@@ -48,6 +51,7 @@ public class CategoriesController : ControllerBase
 
     // GET: api/Category/5
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetCategoryByID(int id)
     {
         var category = await _categoryService.GetCategoryByID(id);
@@ -64,6 +68,7 @@ public class CategoriesController : ControllerBase
 
     // GET: api/Category/posts
     [HttpGet("{id}/posts")]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetPostsInCategory([FromQuery] PostParameters postParameters, int id)
     {
         var posts = await _postsService.GetPostsInCategory(postParameters, id);
