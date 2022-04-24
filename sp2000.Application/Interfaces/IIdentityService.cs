@@ -1,16 +1,13 @@
+using Microsoft.AspNetCore.Http;
+using sp2000.Application.DTO;
 using sp2000.Application.Helpers;
-using sp2000.Application.Models;
 
 namespace sp2000.Application.Interfaces;
 public interface IIdentityService
 {
-    Task<string> GetUserNameAsync(string userId);
+    Task<ApplicationUserDto> GetUserByIdAsync(Guid userId);
 
-    Task<bool> IsInRoleAsync(string userId, string role);
+    Task<ApplicationUserDto> CreateUserAsync(RegisterNewUserDto user);
 
-    Task<bool> AuthorizeAsync(string userId, string policyName);
-
-    Task<CustomApiResponse> CreateUserAsync(string userName, string password);
-
-    Task<bool> LoginAsync(string username, string password);
+    Task<CustomApiResponse> LoginAsync(AuthenticateUserDto authenticateUser, HttpContext httpContext);
 }

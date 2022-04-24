@@ -1,24 +1,20 @@
 using System.Reflection;
-using Duende.IdentityServer.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using sp2000.Application.Interfaces;
 using sp2000.Application.Models;
 
-namespace sp2000.Infrastructure;
+namespace sp2000.Infrastructure.Persistance;
 
-public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTime _dateTime;
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        IOptions<OperationalStoreOptions> operationalStoreOptions,
         ICurrentUserService currentUserService,
         IDateTime dateTime)
-        : base(options, operationalStoreOptions)
+        : base(options)
     {
         _currentUserService = currentUserService;
         _dateTime = dateTime;
@@ -33,7 +29,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     }
 
     // These are our tables
-    public DbSet<ApplicationUser> applicationUsers => Set<ApplicationUser>();
+    public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Comment> Comments => Set<Comment>();
@@ -49,7 +45,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
             // Update the fields for the BaseEntity
             ((BaseEntity)entry.Entity).UpdatedDate = DateTime.UtcNow;
@@ -58,18 +54,21 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
             {
                 ((BaseEntity)entry.Entity).CreatedDate = DateTime.UtcNow;
             }
+        }
 
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        {
             // Update the fields for the AuditableEntity
             switch (entry.State)
             {
                 case EntityState.Added:
                     entry.Entity.CreatedBy = _currentUserService.UserId;
-                    entry.Entity.CreatedDate = _dateTime.Now;
+                    entry.Entity.CreatedDate = DateTime.UtcNow;
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                    entry.Entity.UpdatedDate = _dateTime.Now;
+                    entry.Entity.UpdatedDate = DateTime.UtcNow;
                     break;
             }
         }

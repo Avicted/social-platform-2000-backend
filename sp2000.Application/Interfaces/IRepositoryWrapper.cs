@@ -5,6 +5,7 @@ namespace sp2000.Application.Interfaces;
 // Usage: _wrapper.Category.method_from_IRepositoryBase
 public interface IRepositoryWrapper
 {
+    IApplicationUsersRepository ApplicationUser { get; }
     ICategoriesRepository Category { get; }
     IPostsRepository Post { get; }
     ICommentsRepository Comment { get; }

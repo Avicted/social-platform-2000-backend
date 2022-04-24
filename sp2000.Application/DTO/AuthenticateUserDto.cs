@@ -1,4 +1,3 @@
-
 namespace sp2000.Application.DTO;
 
 public class AuthenticateUserDto

@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using sp2000.Application.Services;
 using sp2000.Application.DTO;
 using sp2000.Application.Helpers;
 using sp2000.Application.Interfaces;
 using AutoWrapper.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[CustomAuthorizeAttribute]
 public class PostsController : ControllerBase
 {
     private readonly IPostsService _postsService;
@@ -22,6 +23,7 @@ public class PostsController : ControllerBase
 
     // GET: api/Posts/5
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetPostByID(int id)
     {
         var post = await _postsService.GetPostByID(id);
@@ -86,6 +88,7 @@ public class PostsController : ControllerBase
     }
 
     [HttpGet("{postId}/comments")]
+    [AllowAnonymous]
     public async Task<CustomApiResponse> GetAllCommentsInPost(int postId)
     {
         var comments = await _commentsService.GetAllCommentsInPost(postId);

@@ -6,6 +6,9 @@ using sp2000.Infrastructure;
 using sp2000.Application.Interfaces;
 using sp2000.API.Services;
 using sp2000.Application;
+using sp2000.Infrastructure.Persistance;
+using sp2000.Application.Helpers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +27,14 @@ builder.Services.AddCors(options =>
 
 
 // Add services to the container.
+builder.Services.Configure<ApplicationSettings>(
+    builder.Configuration.GetSection("JWTConfig")
+);
+
 builder.Services.AddControllers();
+
 builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddApplication();
 
 // @Note(Avic): Scoped services live as long as one request
@@ -48,7 +57,25 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Social Platform API",
-        Description = "An ASP.NET Core Web API for discussing topics in a forum",
+        Description = "A Dotnet Core Web API for discussing topics in a forum",
+        Contact = new OpenApiContact()
+        {
+            Name = "Victor Anderssén",
+            Url = new Uri("https://notasoftwaredevelopmentcompany.com"),
+        },
+        License = new OpenApiLicense()
+        {
+            Name = "MIT",
+            Url = new Uri("https://choosealicense.com/licenses/mit/"),
+        },
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey
     });
 });
 
@@ -84,38 +111,69 @@ using (var scope = app.Services.CreateScope())
 // @Note(Avic): Formats the REST API responses from the controllers so that
 // errors and 200 OK results can easily be distiguished in the React client
 // https://github.com/proudmonkey/AutoWrapper
-/* app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
 {
     ShowApiVersion = true,
     ShowStatusCode = true,
     UseCustomSchema = true,
+    IsApiOnly = false,
     UseApiProblemDetailsException = true
-}); */
+});
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(MyAllowSpecificOrigins);
 }
 
+app.UseDefaultFiles(); // so index.html is not required
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseIdentityServer();
 app.UseAuthorization();
 
-app.MapControllers();
-
-/* app.UseEndpoints(endpoints =>
+// check Swagger authentication
+app.Use(async (context, next) =>
 {
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller}/{action=Index}/{id?}");
-    endpoints.MapRazorPages();
+    var path = context.Request.Path;
+    if (path.Value.Contains("/swagger/", StringComparison.OrdinalIgnoreCase))
+    {
+        if (!context.User.Identity.IsAuthenticated)
+        {
+            context.Response.Redirect("/login");
+            return;
+        }
+    }
+
+    await next();
+});
+
+app.UseEndpoints(app =>
+{
+    app.MapControllers();
+});
+
+// catch-all handler for HTML5 client routes - serve index.html
+/* app.Run(async context =>
+{
+    var path = context.Request.Path.Value;
+    var environment = builder.Environment;
+
+    // Make sure Angular output was created in wwwroot
+    // Running Angular in dev mode nukes output folder!
+    // so it could be missing.
+    if (environment.WebRootPath == null)
+    {
+        throw new InvalidOperationException("wwwroot folder doesn't exist. Please recompile your React Project before accessing index.html. API calls will work fine.");
+    }
+
+    context.Response.ContentType = "text/html";
+    await context.Response.SendFileAsync(Path.Combine(environment.WebRootPath, "index.html"));
 }); */
 
 app.Run();
