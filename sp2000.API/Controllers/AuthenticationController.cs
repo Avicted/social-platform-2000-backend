@@ -43,8 +43,6 @@ public class AuthenticationController : ControllerBase
     [HttpPost("login")]
     public async Task<CustomApiResponse> Authenticate(AuthenticateUserDto authenticateUser)
     {
-        var res = await _identityService.LoginAsync(authenticateUser, HttpContext);
-
-        throw new ApiProblemDetailsException("Testing", 401);
+        return await _identityService.LoginAsync(authenticateUser, HttpContext);
     }
 }
