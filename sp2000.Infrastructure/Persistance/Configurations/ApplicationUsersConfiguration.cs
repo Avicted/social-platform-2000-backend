@@ -21,5 +21,21 @@ public class ApplicationUserEntityTypeConfiguration : IEntityTypeConfiguration<A
             .Property(u => u.Username)
             .IsRequired()
             .HasMaxLength(12);
+
+        builder
+            .HasMany<Post>(u => u.Posts)
+            .WithOne();
+
+        builder
+            .HasMany<Comment>(u => u.Comments)
+            .WithOne();
+
+        builder
+            .Navigation(u => u.Comments)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+        builder
+            .Navigation(u => u.Posts)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
     }
 }

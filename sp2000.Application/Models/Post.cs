@@ -12,4 +12,5 @@ public class Post : BaseEntity
     public int CategoryId { get; set; }
 
     public List<Comment> Comments { get; set; } = null!;
+
 }

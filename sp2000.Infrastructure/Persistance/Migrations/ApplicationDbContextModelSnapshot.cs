@@ -81,10 +81,12 @@ namespace sp2000.Infrastructure.Persistance.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CommentId"));
 
+                    b.Property<Guid?>("ApplicationUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("AuthorName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -105,6 +107,8 @@ namespace sp2000.Infrastructure.Persistance.Migrations
 
                     b.HasKey("CommentId");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("PostId");
 
                     b.ToTable("Comments");
@@ -117,6 +121,9 @@ namespace sp2000.Infrastructure.Persistance.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PostId"));
+
+                    b.Property<Guid?>("ApplicationUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
@@ -138,6 +145,8 @@ namespace sp2000.Infrastructure.Persistance.Migrations
 
                     b.HasKey("PostId");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Posts");
@@ -145,6 +154,10 @@ namespace sp2000.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("sp2000.Application.Models.Comment", b =>
                 {
+                    b.HasOne("sp2000.Application.Models.ApplicationUser", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("sp2000.Application.Models.Post", null)
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
@@ -154,11 +167,22 @@ namespace sp2000.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("sp2000.Application.Models.Post", b =>
                 {
+                    b.HasOne("sp2000.Application.Models.ApplicationUser", null)
+                        .WithMany("Posts")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("sp2000.Application.Models.Category", null)
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("sp2000.Application.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("sp2000.Application.Models.Category", b =>
