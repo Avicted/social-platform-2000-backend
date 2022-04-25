@@ -9,7 +9,7 @@ namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[CustomAuthorizeAttribute]
+[Authorize]
 public class CommentsController : ControllerBase
 {
     private readonly ICommentsService _commentsService;

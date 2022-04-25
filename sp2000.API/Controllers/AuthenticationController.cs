@@ -1,3 +1,4 @@
+using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using sp2000.Application.DTO;
 using sp2000.Application.Helpers;
@@ -30,6 +31,7 @@ public class AuthenticationController : ControllerBase
             );
         }
 
+
         return new CustomApiResponse(
             message: "User successfully created",
             statusCode: 201,
@@ -41,6 +43,8 @@ public class AuthenticationController : ControllerBase
     [HttpPost("login")]
     public async Task<CustomApiResponse> Authenticate(AuthenticateUserDto authenticateUser)
     {
-        return await _identityService.LoginAsync(authenticateUser, HttpContext);
+        var res = await _identityService.LoginAsync(authenticateUser, HttpContext);
+
+        throw new ApiProblemDetailsException("Testing", 401);
     }
 }
