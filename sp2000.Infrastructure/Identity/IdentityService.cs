@@ -58,6 +58,8 @@ public class IdentityService : IIdentityService
             );
         }
 
+        // @Todo(Avic): check the model state? for instance now we can create users with an empty username
+
         // create a new application user
         var newUser = new ApplicationUser()
         {
@@ -97,10 +99,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            return new CustomApiResponse(
-                message: "Invalid login credentials",
-                statusCode: 401
-            );
+            throw new ApiProblemDetailsException("Invalid login credentials", 401);
         }
 
         var passwordHash = user.PasswordHash;
@@ -108,10 +107,7 @@ public class IdentityService : IIdentityService
 
         if (!isPasswordValid)
         {
-            return new CustomApiResponse(
-                message: "Invalid login credentials",
-                statusCode: 401
-            );
+            throw new ApiProblemDetailsException("Invalid login credentials", 401);
         }
 
         // create a new token with token helper and add our claim

@@ -9,7 +9,7 @@ namespace sp2000.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[CustomAuthorizeAttribute]
+[Authorize]
 public class PostsController : ControllerBase
 {
     private readonly IPostsService _postsService;
