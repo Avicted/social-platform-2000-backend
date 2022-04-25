@@ -8,16 +8,6 @@ namespace sp2000.Infrastructure.Persistance.Configurations
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
-
-            builder
-                .Property(c => c.PostId)
-                .IsRequired();
-
-            builder
-                .Property(c => c.AuthorName)
-                .HasMaxLength(30)
-                .IsRequired();
-
             builder
                 .Property(c => c.Content)
                 .HasMaxLength(10000) // @Note(Avic): Reddit uses 10k
