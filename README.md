@@ -32,7 +32,7 @@ dotnet-ef database update \
 
 # Database Diagram
 
-![Database Diagram](documentation/db_diagram.png "Database Diagram")
+![Database Diagram](documentation/db_diagram_4.png "Database Diagram")
 
 # Common problems
 
