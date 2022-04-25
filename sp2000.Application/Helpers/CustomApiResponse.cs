@@ -1,3 +1,4 @@
+
 namespace sp2000.Application.Helpers;
 
 public class CustomApiResponse
