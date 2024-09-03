@@ -129,8 +129,8 @@ public static class ApplicationDbContextSeed
             context.Comments.Add(new Comment
             {
                 CommentId = 103,
-                AuthorName = "BobAlice1337",
-                Content = "I dont think så",
+                AuthorName = "Bob",
+                Content = "Testing 123 åäö ÅÄÖ !",
                 PostId = 1,
                 ParentCommentId = 102,
             });

@@ -17,7 +17,7 @@ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 1. Be nice to eachother.
 '
 
-build_command="dotnet publish -c release --runtime linux-x64"
+build_command="dotnet publish -c release --runtime linux-x64 --self-contained"
 bin_path="./bin/release/net6.0/linux-x64/social-platform-2000-backend"
 
 install_arch(){

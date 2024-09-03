@@ -2,7 +2,7 @@
 
 VSCode development docker container has been setup.
 
-Run:
+Run inside the remote development container:
 
 ```bash
 ./develop.sh
